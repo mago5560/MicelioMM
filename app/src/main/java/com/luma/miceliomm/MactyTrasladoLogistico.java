@@ -675,8 +675,6 @@ public class MactyTrasladoLogistico extends AppCompatActivity
     }
     // </editor-fold>
 
-
-
     // <editor-fold defaultstate="collapsed" desc="Menu, Opciones y regresar a principal">
 
     private void goHome() {

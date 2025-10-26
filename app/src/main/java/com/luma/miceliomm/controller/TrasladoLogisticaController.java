@@ -82,14 +82,10 @@ public class TrasladoLogisticaController {
         ApiService apiService = retrofitAuth.create(ApiService.class);
 
 
-        MultipartBody.Part multipartarchivoImagen = null;
+            RequestBody archivoImagen = RequestBody.create(MediaType.parse("image/*"),cls.fileImagen);
+        MultipartBody.Part multipartarchivoImagen = MultipartBody.Part.createFormData("archivoImagen",cls.fileImagen.getName(),archivoImagen);
+            cls.imagenDeEntregadoTraslado = cls.fileImagen.getName();
 
-        if (!cls.rutaImagen.isEmpty()){
-            File _file = new File(cls.rutaImagen);
-            RequestBody archivoImagen = RequestBody.create(MediaType.parse("image/*"),_file);
-            multipartarchivoImagen = MultipartBody.Part.createFormData("archivoImagen",_file.getName(),archivoImagen);
-            cls.imagenDeEntregadoTraslado = _file.getName();
-        }
         RequestBody IdTrasladoLogistica = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(cls.idTrasladoLogistica));
         RequestBody IdTraslado = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(cls.idTraslado));
         RequestBody RecibidoPor = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(cls.recibidoPorTraslado));
@@ -198,14 +194,11 @@ public class TrasladoLogisticaController {
         ApiService apiService = retrofitAuth.create(ApiService.class);
 
 
-        MultipartBody.Part multipartarchivoImagen = null;
 
-        if (!cls.rutaImagen.isEmpty()){
-            File _file = new File(cls.rutaImagen);
-            RequestBody archivoImagen = RequestBody.create(MediaType.parse("image/*"),_file);
-            multipartarchivoImagen = MultipartBody.Part.createFormData("archivoImagen",_file.getName(),archivoImagen);
-            cls.nombreImagen = _file.getName();
-        }
+            RequestBody archivoImagen = RequestBody.create(MediaType.parse("image/*"),cls.fileImagen);
+        MultipartBody.Part multipartarchivoImagen = MultipartBody.Part.createFormData("archivoImagen",cls.fileImagen.getName(),archivoImagen);
+            cls.nombreImagen = cls.fileImagen.getName();
+
         RequestBody IdTrasladoLogistica = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(cls.idTrasladoLogistico));
 
         RequestBody Imagen = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(cls.nombreImagen));
