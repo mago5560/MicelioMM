@@ -1,0 +1,19 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--
+    <style name="Base.Theme.MicelioMM" parent="Theme.Material3.DayNight.NoActionBar">
+    </style>
+    -->
+    <style name="Base.Theme.MicelioMM" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="colorAccent">@color/color_accent</item>
+
+    </style>
+
+    <style name="Theme.MicelioMM" parent="Base.Theme.MicelioMM" />
+
+    <style name="SplashTheme" parent="Base.Theme.MicelioMM">
+        <item name="android:windowBackground">@drawable/splash</item>
+    </style>
+</resources>

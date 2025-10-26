@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+
+    <!-- Colores del tema  -->
+    <color name="color_primary_light">#ffd7f1</color>
+    <color name="color_primary">#824c76</color>
+    <color name="color_primary_dark">#6c5464</color>
+    <color name="color_accent_light">#ffd7f1</color>
+    <color name="color_accent">#824c76</color>
+    <color name="color_accent_dark">#6c5464</color>
+
+
+    <color name="color_borrador">#f9423a</color>
+    <color name="color_cerrado">#f6a04d</color>
+    <color name="color_listo_recoger">#f3d321</color>
+    <color name="color_programado">#00bc7b</color>
+    <color name="color_recibido_piloto">#486aff</color>
+    <color name="color_ruta">#4d49be</color>
+    <color name="color_entregado">#f9423a</color>
+    <color name="color_re_programado">#f6a04d</color>
+    <color name="color_liquidado">#f3d321</color>
+
+</resources>

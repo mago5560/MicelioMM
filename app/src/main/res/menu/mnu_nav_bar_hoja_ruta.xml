@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<!--
+    <item
+        android:id="@+id/fragmFacturaEntrega"
+        android:icon="@drawable/factura_edit_icon"
+        android:title="Entrega" />
+
+    <item
+        android:id="@+id/fragmFacturaCliente"
+        android:icon="@drawable/cliente_icon"
+        android:title="Cliente" />
+
+
+    <item
+        android:id="@+id/fragmFactura"
+        android:icon="@drawable/factura_icon"
+        android:title="Factura" />
+
+    <item
+        android:id="@+id/fragmFacturaImagen"
+        android:icon="@drawable/camera_icon"
+        android:title="Imagen" />
+        -->
+</menu>
