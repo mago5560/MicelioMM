@@ -310,7 +310,8 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
     // <editor-fold defaultstate="collapsed" desc="Menu, Opciones y regresar a principal">
 
     private void goHome() {
-        intent = new Intent().setClass(this, MactyHojaRuta.class);
+        //intent = new Intent().setClass(this, MactyHojaRuta.class);
+        intent = new Intent().setClass(this, MactyPrincipal.class);
         startActivity(intent);
         finish();
     }

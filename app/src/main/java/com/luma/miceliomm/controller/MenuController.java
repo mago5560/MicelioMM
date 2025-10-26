@@ -35,7 +35,7 @@ public class MenuController {
 
     public void fillOpciones(){
         ArrayList<MenuModel> list = new ArrayList<>();
-        list.add(new MenuModel(context.getResources().getDrawable(R.drawable.truck),"Hoja Ruta",1 ));
+       // list.add(new MenuModel(context.getResources().getDrawable(R.drawable.truck),"Hoja Ruta",1 ));
         list.add(new MenuModel(context.getResources().getDrawable(R.drawable.downloader_rout),"Descargar Ruta",5 ));
         list.add(new MenuModel(context.getResources().getDrawable(R.drawable.master),"Maestros",2 ));
         list.add(new MenuModel(context.getResources().getDrawable(R.drawable.update),"Actualizar App",3 ));

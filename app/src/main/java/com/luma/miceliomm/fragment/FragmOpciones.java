@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -36,7 +37,8 @@ public class FragmOpciones extends Fragment  implements MenuAdapter.OnItemClickL
     GlobalCustoms vars = GlobalCustoms.getInstance();
 
     private View view;
-   // private NavController navController;
+
+    private NavController navController;
 
     private MenuAdapter menuAdapter;
     private ArrayList<MenuModel> menuClassAList;

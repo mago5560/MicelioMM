@@ -13,6 +13,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -42,15 +44,12 @@ public class MactyPrincipal extends AppCompatActivity  {
 
         findViewsByIds();
         actions();
-
+        setUpNavigation();
         permisosAPI();
     }
 
     private void findViewsByIds() {
         util = new FunctionCustoms();
-
-
-
 
         ((BottomNavigationView) findViewById(R.id.bottomNavigationView)).setBackground( null);
         ((BottomNavigationView) findViewById(R.id.bottomNavigationView)).getMenu().getItem(2).setEnabled(true);
@@ -69,8 +68,8 @@ public class MactyPrincipal extends AppCompatActivity  {
     }
 
     public void setUpNavigation(){
-        //NavHostFragment navHostFragment =  (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-        //NavigationUI.setupWithNavController(((BottomNavigationView) findViewById(R.id.bottomNavigationView)), navHostFragment.getNavController());
+        NavHostFragment navHostFragment =  (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        NavigationUI.setupWithNavController(((BottomNavigationView) findViewById(R.id.bottomNavigationView)), navHostFragment.getNavController());
     }
 
     //*****************************************************
