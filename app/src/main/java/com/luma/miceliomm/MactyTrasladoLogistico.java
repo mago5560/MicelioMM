@@ -219,6 +219,13 @@ public class MactyTrasladoLogistico extends AppCompatActivity
             ((Button) findViewById(R.id.btnGrabar)).setText("Entrega");
         }
 
+
+
+        ((TextView) findViewById(R.id.lblnombreUbicacionOrigen)) .setText( hojaRutaDetalleModel.nombreUbicacionOrigen);
+        ((TextView) findViewById(R.id.lblnombreUbicacionDestino)) .setText( hojaRutaDetalleModel.nombreUbicacionDestino);
+        ((TextView) findViewById(R.id.lblnombreTipoMovimiento)) .setText( hojaRutaDetalleModel.nombreTipoMovimiento);
+        ((TextView) findViewById(R.id.lbltelefonoUbicacionDestino)) .setText( hojaRutaDetalleModel.telefonoUbicacionDestino);
+
     }
 
     private void grabar(){
@@ -407,14 +414,14 @@ public class MactyTrasladoLogistico extends AppCompatActivity
             File outputFile = File.createTempFile("temp_image", ".jpg", outputDir);
 
             FileOutputStream fos = new FileOutputStream(outputFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
             fos.flush();
             fos.close();
 
             // Actualiza tu modelo con la ruta física
             trasladoLogisticaModel.rutaImagen =outputFile.getAbsolutePath();
             trasladoLogisticaModel.imagenDeEntregadoTraslado = outputFile.getName();
-
+            trasladoLogisticaModel.fileImagen = outputFile;
             Log.d("Imagen", "Imagen comprimida en: " + outputFile.getAbsolutePath());
         } catch (Exception e) {
             e.printStackTrace();

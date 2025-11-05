@@ -97,6 +97,7 @@ import java.util.ArrayList;
          * " imagenDeRecibidoTraslado TEXT,  " +
          * " imagenDeEntregadoTraslado TEXT,  " +
          * " fechaDeEntregaTraslado TEXT  " +
+         * " nombreTipoMovimiento TEXT " +
          * " );"
  **/
 public class HojaRutaDao {
@@ -201,6 +202,8 @@ public class HojaRutaDao {
         values.put("imagenDeEntregadoTraslado", cls.imagenDeEntregadoTraslado);
         values.put("fechaDeEntregaTraslado", cls.fechaDeEntregaTraslado);
 
+        values.put("nombreTipoMovimiento", cls.nombreTipoMovimiento);
+
         return db.insert("TblHojaRuta", null, values);
     }
 
@@ -297,6 +300,7 @@ public class HojaRutaDao {
             v.imagenDeRecibidoTraslado = cursor.getString(cursor.getColumnIndexOrThrow("imagenDeRecibidoTraslado"));
             v.imagenDeEntregadoTraslado = cursor.getString(cursor.getColumnIndexOrThrow("imagenDeEntregadoTraslado"));
             v.fechaDeEntregaTraslado = cursor.getString(cursor.getColumnIndexOrThrow("fechaDeEntregaTraslado"));
+            v.nombreTipoMovimiento = cursor.getString(cursor.getColumnIndexOrThrow("nombreTipoMovimiento"));
 
             lst.add(v);
         }
@@ -400,7 +404,7 @@ public class HojaRutaDao {
             v.imagenDeRecibidoTraslado = cursor.getString(cursor.getColumnIndexOrThrow("imagenDeRecibidoTraslado"));
             v.imagenDeEntregadoTraslado = cursor.getString(cursor.getColumnIndexOrThrow("imagenDeEntregadoTraslado"));
             v.fechaDeEntregaTraslado = cursor.getString(cursor.getColumnIndexOrThrow("fechaDeEntregaTraslado"));
-
+            v.nombreTipoMovimiento = cursor.getString(cursor.getColumnIndexOrThrow("nombreTipoMovimiento"));
             lst.add(v);
         }
         cursor.close();
@@ -501,6 +505,7 @@ public class HojaRutaDao {
             v.imagenDeRecibidoTraslado = cursor.getString(cursor.getColumnIndexOrThrow("imagenDeRecibidoTraslado"));
             v.imagenDeEntregadoTraslado = cursor.getString(cursor.getColumnIndexOrThrow("imagenDeEntregadoTraslado"));
             v.fechaDeEntregaTraslado = cursor.getString(cursor.getColumnIndexOrThrow("fechaDeEntregaTraslado"));
+            v.nombreTipoMovimiento = cursor.getString(cursor.getColumnIndexOrThrow("nombreTipoMovimiento"));
 
             lst.add(v);
         }

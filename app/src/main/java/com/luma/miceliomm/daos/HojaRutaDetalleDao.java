@@ -33,6 +33,8 @@ public class HojaRutaDetalleDao {
 
                 "   a.idEstado, d.nombre as estadoNombre," +
                 "  SUM(a.bultos) as totalBultos " +
+                " ,a.nombreUbicacionOrigen , a.nombreUbicacionDestino ,  a.nombreTipoMovimiento " +
+                " , a.telefonoUbicacionDestino "+
                 " FROM TblHojaRuta a " +
                 " LEFT JOIN TblPiloto c ON a.idPiloto = c.IdPersonal " +
                 " LEFT JOIN TblEstados d ON a.idEstado = d.idEstado " +
@@ -42,7 +44,9 @@ public class HojaRutaDetalleDao {
                 "   a.nombreHorarioTraslado, a.horarioEntregaTraslado, a.direccionEntregaTraslado, " +
                 " a.nombreDepartamentoTraslado, a.nombreMunicipioTraslado, a.zonaTraslado, a.entregarATraslado, " +
                 " a.recibidoPorTraslado, a.latitudEntregaTraslado, a.longitudEntregaTraslado, a.observacionesEntregaTraslado,"+
-                "                   a.idEstado, d.nombre "
+                "                   a.idEstado, d.nombre "+
+                " ,a.nombreUbicacionOrigen , a.nombreUbicacionDestino ,  a.nombreTipoMovimiento " +
+                " , a.telefonoUbicacionDestino "
                 ;
 
         Cursor cursor = db.rawQuery(sql, new String[]{IdHojaDeRuta});
@@ -74,6 +78,84 @@ public class HojaRutaDetalleDao {
             v.idEstado = cursor.getInt(cursor.getColumnIndexOrThrow("idEstado"));
             v.nombreEstado = cursor.getString(cursor.getColumnIndexOrThrow("estadoNombre"));
             v.totalBultos = cursor.getInt(cursor.getColumnIndexOrThrow("totalBultos"));
+
+            v.nombreUbicacionOrigen = cursor.getString(cursor.getColumnIndexOrThrow("nombreUbicacionOrigen"));
+            v.nombreUbicacionDestino = cursor.getString(cursor.getColumnIndexOrThrow("nombreUbicacionDestino"));
+            v.nombreTipoMovimiento = cursor.getString(cursor.getColumnIndexOrThrow("nombreTipoMovimiento"));
+
+            v.telefonoUbicacionDestino = cursor.getString(cursor.getColumnIndexOrThrow("telefonoUbicacionDestino"));
+            arrayList.add(v);
+        }
+
+        cursor.close();
+        return arrayList;
+
+    }
+
+    public ArrayList<HojaRutaDetalleModel> selectDetalle(String IdHojaDeRuta, String IdEstado){
+        ArrayList<HojaRutaDetalleModel> arrayList = new ArrayList<>();
+        // INNER JOIN entre Paquetes y Rutas
+        String sql = "SELECT a.idHojaDeRuta,a.hojaDeRutaEstado, a.idTraslado,a.idTrasladoLogistica, " +
+
+                " a.observaciones,  a.referencia, " +
+                "   a.nombreHorarioTraslado, a.horarioEntregaTraslado, a.direccionEntregaTraslado, " +
+                " a.nombreDepartamentoTraslado, a.nombreMunicipioTraslado, a.zonaTraslado, a.entregarATraslado, " +
+                " a.recibidoPorTraslado, a.latitudEntregaTraslado, a.longitudEntregaTraslado, a.observacionesEntregaTraslado,"+
+
+                "   a.idEstado, d.nombre as estadoNombre," +
+                "  SUM(a.bultos) as totalBultos " +
+                " ,a.nombreUbicacionOrigen , a.nombreUbicacionDestino ,  a.nombreTipoMovimiento " +
+                " , a.telefonoUbicacionDestino "+
+                " FROM TblHojaRuta a " +
+                " LEFT JOIN TblPiloto c ON a.idPiloto = c.IdPersonal " +
+                " LEFT JOIN TblEstados d ON a.idEstado = d.idEstado " +
+                " WHERE a.idHojaDeRuta = ? " +
+                " AND a.idEstado IN ( " + IdEstado + " ) " +
+                " GROUP BY a.idHojaDeRuta,a.hojaDeRutaEstado, a.idTraslado,a.idTrasladoLogistica, " +
+                " a.observaciones,  a.referencia, " +
+                "   a.nombreHorarioTraslado, a.horarioEntregaTraslado, a.direccionEntregaTraslado, " +
+                " a.nombreDepartamentoTraslado, a.nombreMunicipioTraslado, a.zonaTraslado, a.entregarATraslado, " +
+                " a.recibidoPorTraslado, a.latitudEntregaTraslado, a.longitudEntregaTraslado, a.observacionesEntregaTraslado,"+
+                "                   a.idEstado, d.nombre "+
+                " ,a.nombreUbicacionOrigen , a.nombreUbicacionDestino ,  a.nombreTipoMovimiento " +
+                " , a.telefonoUbicacionDestino "
+                ;
+
+        Cursor cursor = db.rawQuery(sql, new String[]{IdHojaDeRuta});
+        //cursor.moveToFirst();
+        while (cursor.moveToNext()) {
+            HojaRutaDetalleModel v = new HojaRutaDetalleModel();
+            v.idHoraRuta = cursor.getInt(cursor.getColumnIndexOrThrow("idHojaDeRuta"));
+            v.hojaDeRutaEstado = cursor.getInt(cursor.getColumnIndexOrThrow("hojaDeRutaEstado"));
+
+            v.idTraslado = cursor.getInt(cursor.getColumnIndexOrThrow("idTraslado"));
+            v.idTrasladoLogistica = cursor.getInt(cursor.getColumnIndexOrThrow("idTrasladoLogistica"));
+
+            v.observaciones =cursor.getString(cursor.getColumnIndexOrThrow("observaciones"));
+            v.referencia =cursor.getString(cursor.getColumnIndexOrThrow("referencia"));
+            v.nombreHorarioTraslado =cursor.getString(cursor.getColumnIndexOrThrow("nombreHorarioTraslado"));
+            v.horarioEntregaTraslado = cursor.getInt(cursor.getColumnIndexOrThrow("horarioEntregaTraslado"));
+            v.direccionEntregaTraslado =cursor.getString(cursor.getColumnIndexOrThrow("direccionEntregaTraslado"));
+
+            v.nombreDepartamentoTraslado =cursor.getString(cursor.getColumnIndexOrThrow("nombreDepartamentoTraslado"));
+            v.nombreMunicipioTraslado =cursor.getString(cursor.getColumnIndexOrThrow("nombreMunicipioTraslado"));
+            v.zonaTraslado =cursor.getString(cursor.getColumnIndexOrThrow("zonaTraslado"));
+            v.entregarATraslado =cursor.getString(cursor.getColumnIndexOrThrow("entregarATraslado"));
+
+            v.recibidoPorTraslado =cursor.getString(cursor.getColumnIndexOrThrow("recibidoPorTraslado"));
+            v.latitudEntregaTraslado =cursor.getString(cursor.getColumnIndexOrThrow("latitudEntregaTraslado"));
+            v.longitudEntregaTraslado =cursor.getString(cursor.getColumnIndexOrThrow("longitudEntregaTraslado"));
+            v.observacionesEntregaTraslado =cursor.getString(cursor.getColumnIndexOrThrow("observacionesEntregaTraslado"));
+
+            v.idEstado = cursor.getInt(cursor.getColumnIndexOrThrow("idEstado"));
+            v.nombreEstado = cursor.getString(cursor.getColumnIndexOrThrow("estadoNombre"));
+            v.totalBultos = cursor.getInt(cursor.getColumnIndexOrThrow("totalBultos"));
+
+            v.nombreUbicacionOrigen = cursor.getString(cursor.getColumnIndexOrThrow("nombreUbicacionOrigen"));
+            v.nombreUbicacionDestino = cursor.getString(cursor.getColumnIndexOrThrow("nombreUbicacionDestino"));
+            v.nombreTipoMovimiento = cursor.getString(cursor.getColumnIndexOrThrow("nombreTipoMovimiento"));
+
+            v.telefonoUbicacionDestino = cursor.getString(cursor.getColumnIndexOrThrow("telefonoUbicacionDestino"));
             arrayList.add(v);
         }
 
@@ -94,6 +176,8 @@ public class HojaRutaDetalleDao {
 
                 "   a.idEstado, d.nombre as estadoNombre," +
                 "  a.bultos" +
+                " ,a.nombreUbicacionOrigen , a.nombreUbicacionDestino ,  a.nombreTipoMovimiento" +
+                " , a.telefonoUbicacionDestino "+
                 " FROM TblHojaRuta a " +
                 " LEFT JOIN TblPiloto c ON a.idPiloto = c.IdPersonal " +
                 " LEFT JOIN TblEstados d ON a.idEstado = d.idEstado " +
@@ -129,6 +213,11 @@ public class HojaRutaDetalleDao {
             v.idEstado = cursor.getInt(cursor.getColumnIndexOrThrow("idEstado"));
             v.nombreEstado = cursor.getString(cursor.getColumnIndexOrThrow("estadoNombre"));
             v.totalBultos = cursor.getInt(cursor.getColumnIndexOrThrow("bultos"));
+
+            v.nombreUbicacionOrigen = cursor.getString(cursor.getColumnIndexOrThrow("nombreUbicacionOrigen"));
+            v.nombreUbicacionDestino = cursor.getString(cursor.getColumnIndexOrThrow("nombreUbicacionDestino"));
+            v.nombreTipoMovimiento = cursor.getString(cursor.getColumnIndexOrThrow("nombreTipoMovimiento"));
+            v.telefonoUbicacionDestino = cursor.getString(cursor.getColumnIndexOrThrow("telefonoUbicacionDestino"));
         }
 
         cursor.close();
@@ -205,6 +294,22 @@ public class HojaRutaDetalleDao {
         return false;
     }
 
+    public int selectCountEstadoTrasladoLogistico(String IdHojaDeRuta , String IdEstado){
+        int total=0;
+        String sql = "SELECT Count(1) Total " +
+                " FROM TblHojaRuta a " +
+                " WHERE a.idHojaDeRuta = ? " +
+                " AND a.idEstado IN ( " + IdEstado + " ) "
+                ;
+
+        Cursor cursor = db.rawQuery(sql, new String[]{ IdHojaDeRuta});
+        cursor.moveToFirst();
+        total = cursor.getInt(cursor.getColumnIndexOrThrow("Total"));
+        cursor.close();
+        return total;
+
+    }
+
     public long updateTrasladoLogistico(TrasladoLogisticaModel cls){
         ContentValues values = new ContentValues();
         values.put("recibidoPorTraslado", cls.recibidoPorTraslado);
@@ -226,7 +331,7 @@ public class HojaRutaDetalleDao {
         values.put("observacionRecoleccion", cls.observaciones);
         values.put("idEstado",cls.idEstado);
         return db.update("TblHojaRuta",values,
-                "idHojaDeRuta= ? AND idTraslado = ? AND idTrasladoLogistica=?",
+                "idHojaDeRuta= ? AND idTraslado = ? AND idTrasladoLogistica= ?",
                 new String[]{String.valueOf(cls.idHojaDeRuta),String.valueOf(cls.idTraslado),String.valueOf(cls.idTrasladoLogistico)});
     }
 

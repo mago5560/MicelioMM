@@ -1,6 +1,7 @@
 package com.luma.miceliomm.fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -134,6 +135,27 @@ public class FragmPrincipal extends Fragment implements HojaRutaResumenAdapter.O
     public void onClick(HojaRutaResumenAdapter.ItemAdapterViewHolder holder, int position) {
         hojaDeRutaDetalle(hojaRutaResumenAdapter.info.get(position).idHoraRuta);
     }
+
+    /*
+    @Override
+    public void onClickTelefono(HojaRutaResumenAdapter.ItemAdapterViewHolder holder, int position) {
+
+        iniciarLlamada(hojaRutaResumenAdapter.info.get(position).telefonoUbicacionDestino);
+    }
+     */
+
+    private void iniciarLlamada(String numeroTelefono){
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + numeroTelefono));
+
+        // Verificar que haya una app de teléfono disponible
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+            getActivity().startActivity(intent);
+        } else {
+            util.mensaje("No hay apliccion de telefono disponible", getActivity()).show();
+        }
+    }
+
 
     private void hojaDeRutaDetalle(int idHojaDeRuta){
         intent = new Intent().setClass(getContext(), MactyHojaRutaDetalle.class);

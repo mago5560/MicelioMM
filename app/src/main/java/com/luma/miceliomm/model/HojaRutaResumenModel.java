@@ -11,6 +11,7 @@ public class HojaRutaResumenModel {
     public String nombrePiloto ="";
     public int totalBultos=0;
     public String fecha="";
+    //public String telefonoUbicacionDestino ="";
 
     public  ActualizaHojaDeRutaModel actualizaHojaDeRutaModel= new ActualizaHojaDeRutaModel();
 

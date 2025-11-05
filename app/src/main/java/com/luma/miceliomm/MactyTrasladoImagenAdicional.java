@@ -203,6 +203,12 @@ public class MactyTrasladoImagenAdicional extends AppCompatActivity
         ((TextView) findViewById(R.id.lblRecibidoPorTraslado)) .setText(hojaRutaDetalleModel.recibidoPorTraslado);
         ((TextView) findViewById(R.id.lblObservacionesEntregaTraslado)) .setText(hojaRutaDetalleModel.observacionesEntregaTraslado);
         ((TextView) findViewById(R.id.lblTotalBultos)) .setText(String.valueOf(hojaRutaDetalleModel.totalBultos));
+
+
+        ((TextView) findViewById(R.id.lblnombreUbicacionOrigen)) .setText( hojaRutaDetalleModel.nombreUbicacionOrigen);
+        ((TextView) findViewById(R.id.lblnombreUbicacionDestino)) .setText( hojaRutaDetalleModel.nombreUbicacionDestino);
+        ((TextView) findViewById(R.id.lblnombreTipoMovimiento)) .setText( hojaRutaDetalleModel.nombreTipoMovimiento);
+        ((TextView) findViewById(R.id.lbltelefonoUbicacionDestino)) .setText( hojaRutaDetalleModel.telefonoUbicacionDestino);
     }
 
 
@@ -424,13 +430,14 @@ public class MactyTrasladoImagenAdicional extends AppCompatActivity
             File outputFile = File.createTempFile("temp_image", ".jpg", outputDir);
 
             FileOutputStream fos = new FileOutputStream(outputFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
             fos.flush();
             fos.close();
 
             // Actualiza tu modelo con la ruta física
             model.rutaImagen =outputFile.getAbsolutePath();
             model.imagen = outputFile.getName();
+            model.fileImagen = outputFile;
             Log.d("Imagen", "Imagen comprimida en: " + outputFile.getAbsolutePath());
         } catch (Exception e) {
             e.printStackTrace();

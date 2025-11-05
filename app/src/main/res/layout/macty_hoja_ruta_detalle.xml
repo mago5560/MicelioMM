@@ -13,57 +13,42 @@
 
     <include layout="@layout/item_hoja_ruta_resumen"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal|center_vertical">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="50"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="Traslados"
-            android:textSize="23dp"
-            android:textColor="@color/black"
-            android:textStyle="bold"/>
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="50"
-            android:layout_height="wrap_content"
-            android:text="INICIAR RUTA"
-            android:id="@+id/btnIniciarHojaRuta"
-            android:layout_alignParentEnd="true"
-            android:visibility="gone"
-            android:backgroundTint="@android:color/holo_green_light"/>
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="50"
-            android:layout_height="wrap_content"
-            android:text="FINALIZAR RUTA"
-            android:id="@+id/btnFinalizarHojaRuta"
-            android:layout_alignParentEnd="true"
-            android:visibility="gone"
-            android:backgroundTint="@android:color/holo_red_light"/>
-
-    </LinearLayout>
+    <include layout="@layout/item_estado_paquete"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <include layout="@layout/item_recycler_view"/>
-        <Button
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="CANCELAR RUTA"
+            android:orientation="horizontal"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_alignParentBottom="true"
-            android:backgroundTint="@android:color/holo_red_light"
-            android:visibility="gone"
-            android:id="@+id/btnCancelarHojaRuta" />
+            android:gravity="center_horizontal|center_vertical">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="INICIAR RUTA"
+                android:id="@+id/btnIniciarHojaRuta"
+                android:layout_alignParentLeft="true"
+                android:backgroundTint="@android:color/holo_green_light"
+                android:theme="@style/AppTheme"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FINALIZAR RUTA"
+                android:id="@+id/btnFinalizarHojaRuta"
+                android:layout_alignParentEnd="true"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:theme="@style/AppTheme"/>
+
+        </RelativeLayout>
 
     </RelativeLayout>
 

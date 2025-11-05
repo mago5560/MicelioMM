@@ -1,6 +1,7 @@
 package com.luma.miceliomm;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -131,6 +132,25 @@ public class MactyHojaRuta extends AppCompatActivity implements HojaRutaResumenA
     @Override
     public void onClick(HojaRutaResumenAdapter.ItemAdapterViewHolder holder, int position) {
         hojaDeRutaDetalle(hojaRutaResumenAdapter.info.get(position).idHoraRuta);
+    }
+
+    /*
+    @Override
+    public void onClickTelefono(HojaRutaResumenAdapter.ItemAdapterViewHolder holder, int position) {
+        iniciarLlamada(hojaRutaResumenAdapter.info.get(position).telefonoUbicacionDestino);
+    }
+     */
+
+    private void iniciarLlamada(String numeroTelefono){
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + numeroTelefono));
+
+        // Verificar que haya una app de teléfono disponible
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            util.mensaje("No hay apliccion de telefono disponible", this).show();
+        }
     }
 
     private void hojaDeRutaDetalle(int idHojaDeRuta){

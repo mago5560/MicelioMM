@@ -2,6 +2,8 @@ package com.luma.miceliomm;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -32,16 +35,21 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
     private Intent intent;
     private FunctionCustoms util;
     private int idHojaRuta=0;
+    private String idEstado = "3";
 
     private HojaDeRutaController hojaDeRutaController;
     private HojaRutaDetalleAdapter hojaRutaDetalleAdapter;
     private ArrayList<HojaRutaDetalleModel> hojaRutaDetalleModelArrayList;
+
+    private CardView selectedCard;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.macty_hoja_ruta_detalle);
         findViewsById();
         actions();
+        estadosCard();
         getParametros();
     }
 
@@ -55,6 +63,8 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         ((RecyclerView) findViewById(R.id.grdDatos)).setLayoutManager(llm);
 
+        ((CardView) findViewById(R.id.cvProgramado)).setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.color_select_card)));
+        selectedCard = ((CardView) findViewById(R.id.cvProgramado));
     }
 
     private void actions(){
@@ -116,6 +126,8 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
         ((TextView) findViewById(R.id.lblCVTotalBultos)) .setText(String.valueOf(v.totalBultos));
         ((TextView) findViewById(R.id.lblCVnombreEstado)).setText(v.hojaRutaNombreEstado);
 
+        //((TextView) findViewById(R.id.lblCVtelefonoUbicacionDestino)).setText(v.telefonoUbicacionDestino);
+
         //ConfiguracionDeColor
         configurarEstado(((TextView) findViewById(R.id.lblCVnombreEstado)),v.hojaDeRutaEstado, ((LinearLayout) findViewById(R.id.llyCVColores)));
 
@@ -129,7 +141,78 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
             ((Button) findViewById(R.id.btnIniciarHojaRuta)).setVisibility(View.GONE);
             ((Button) findViewById(R.id.btnFinalizarHojaRuta)).setVisibility(View.GONE);
         }
+
+        ((TextView) findViewById(R.id.lblProgramado)).setText(String.valueOf(
+                hojaDeRutaController.selectCountTrasladoLogisticoEstado(String.valueOf(idHojaRuta),"3")));
+        ((TextView) findViewById(R.id.lblRuta)).setText(String.valueOf(
+                hojaDeRutaController.selectCountTrasladoLogisticoEstado(String.valueOf(idHojaRuta),"4,5")));
+        ((TextView) findViewById(R.id.lblEntregado)).setText(String.valueOf(
+                hojaDeRutaController.selectCountTrasladoLogisticoEstado(String.valueOf(idHojaRuta),"6,8,9")));
+        ((TextView) findViewById(R.id.lblDevuelto)).setText(
+                String.valueOf(hojaDeRutaController.selectCountTrasladoLogisticoEstado(String.valueOf(idHojaRuta),"7")));
+
         buscarDetalle();
+    }
+
+    private void estadosCard(){
+        ((CardView) findViewById(R.id.cvProgramado)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 1. desmarcar anterior
+                if (selectedCard != null) selectedCard.setBackgroundTintList(null);
+                // 2. marcar el pulsado
+                idEstado = "3";
+                CardView card = (CardView) view;
+                card.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.color_select_card)));
+                selectedCard = card;
+                buscarDetalle();
+            }
+        });
+
+        ((CardView) findViewById(R.id.cvRuta)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 1. desmarcar anterior
+                if (selectedCard != null) selectedCard.setBackgroundTintList(null);
+                // 2. marcar el pulsado
+                idEstado = "4,5";
+                CardView card = (CardView) view;
+                card.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.color_select_card)));
+                selectedCard = card;
+                buscarDetalle();
+            }
+        });
+
+        ((CardView) findViewById(R.id.cvEntregado)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 1. desmarcar anterior
+                if (selectedCard != null) selectedCard.setBackgroundTintList(null);
+                // 2. marcar el pulsado
+                idEstado = "6,8,9";
+                CardView card = (CardView) view;
+                card.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.color_select_card)));
+                selectedCard = card;
+                buscarDetalle();
+            }
+        });
+
+        ((CardView) findViewById(R.id.cvDevuelto)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 1. desmarcar anterior
+                if (selectedCard != null) selectedCard.setBackgroundTintList(null);
+                // 2. marcar el pulsado
+                idEstado = "7";
+                CardView card = (CardView) view;
+                card.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.color_select_card)));
+                selectedCard = card;
+                buscarDetalle();
+            }
+        });
+
+
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="Colocar Color">
@@ -196,7 +279,7 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
                 , ((SwipeRefreshLayout) findViewById(R.id.swipeRefresh))
         );
 
-        hojaDeRutaController.buscarDetalle(idHojaRuta);
+        hojaDeRutaController.buscarDetalle(idHojaRuta,idEstado);
         ((TextView) findViewById(R.id.lblFechaActualizacion)).setText(util.getFechaHoraActual());
     }
 
@@ -233,6 +316,23 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
         recolectarTraslado(hojaRutaDetalleAdapter.info.get(position).idHoraRuta,
                 hojaRutaDetalleAdapter.info.get(position).idTraslado,
                 hojaRutaDetalleAdapter.info.get(position).idTrasladoLogistica);
+    }
+
+    @Override
+    public void onClickTelefono(HojaRutaDetalleAdapter.ItemAdapterViewHolder holder, int position) {
+        iniciarLlamada(hojaRutaDetalleAdapter.info.get(position).telefonoUbicacionDestino);
+    }
+
+    private void iniciarLlamada(String numeroTelefono){
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + numeroTelefono));
+
+        // Verificar que haya una app de teléfono disponible
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            util.mensaje("No hay apliccion de telefono disponible", this).show();
+        }
     }
 
     private void trasladoLogistico(int idHojaDeRuta, int idTraslado, int idTrasladoLogistica, int rechazo){
@@ -272,30 +372,30 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
     }
 
     private void iniciarHojaDeRuta(){
-        if (!hojaDeRutaController.existsTrasladoLogisticoNoRecolectado(idHojaRuta)){
+       // if (!hojaDeRutaController.existsTrasladoLogisticoNoRecolectado(idHojaRuta)){
             intent = new Intent().setClass(this, MactyActualizarHojaRuta.class);
             intent.putExtra("idHojaRuta",idHojaRuta);
             intent.putExtra("iniciar",1);
             intent.putExtra("finalizar",0);
             startActivity(intent);
             finish();
-        }else{
-            util.mensaje("Aun hay traslados sin recolectar, para iniciar la ruta, verifique",this).show();
-        }
+       // }else{
+       //     util.mensaje("Aun hay traslados sin recolectar, para iniciar la ruta, verifique",this).show();
+       // }
 
     }
 
     private void finalizarHojaDeRuta(){
-        if ( !hojaDeRutaController.existsTrasladoLogisticoEnRuta(idHojaRuta) ) {
+      //  if ( !hojaDeRutaController.existsTrasladoLogisticoEnRuta(idHojaRuta) ) {
             intent = new Intent().setClass(this, MactyActualizarHojaRuta.class);
             intent.putExtra("idHojaRuta", idHojaRuta);
             intent.putExtra("iniciar", 0);
             intent.putExtra("finalizar", 1);
             startActivity(intent);
             finish();
-        }else{
-            util.mensaje("Aun hay traslados sin entregar para finalizar la Hoja de Ruta, verifique",this).show();
-        }
+       // }else{
+        //    util.mensaje("Aun hay traslados sin entregar para finalizar la Hoja de Ruta, verifique",this).show();
+       // }
     }
 
     private void verImagenAdicional(int idHojaDeRuta, int idTraslado, int idTrasladoLogistica){

@@ -38,6 +38,7 @@ public class HojaRutaDetalleAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         public void onClickAgregarImagenPaquete(ItemAdapterViewHolder holder, int position);
         public void onClickIniciarPaquete(ItemAdapterViewHolder holder, int position);
         public void onClickRechazoTrasladoLogistico(ItemAdapterViewHolder holder,int position);
+        public void onClickTelefono(ItemAdapterViewHolder holder, int position);
     }
 
     public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
@@ -80,6 +81,11 @@ public class HojaRutaDetalleAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             holderItem.lblCVnombreEstado.setText(cls.nombreEstado);
             holderItem.lblCVTotalBultos.setText(String.valueOf(cls.totalBultos));
+
+            holderItem.lblCVtelefonoUbicacionDestino.setText(cls.telefonoUbicacionDestino);
+            holderItem.lblCVnombreUbicacionOrigen.setText(cls.nombreUbicacionOrigen);
+            holderItem.lblCVnombreUbicacionDestino.setText(cls.nombreUbicacionDestino);
+            holderItem.lblCVnombreTipoMovimiento.setText(cls.nombreTipoMovimiento);
 
             if (cls.idEstado <= 3){
                     holderItem.lblIniciarPaquete.setVisibility(View.VISIBLE);
@@ -173,6 +179,7 @@ public class HojaRutaDetalleAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public class ItemAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView lblCVIdTrasladoLogistica,lblCVobservaciones, lblCVReferencia,lblCVDireccionEntregaTraslado,lblCVTotalBultos,lblCVnombreEstado;
         private TextView lblIrARechazarTraslado,lblIrAEntregarTraslado,lblAgregarImagen,lblIniciarPaquete;
+        private TextView lblCVtelefonoUbicacionDestino,lblCVnombreUbicacionOrigen,lblCVnombreUbicacionDestino,lblCVnombreTipoMovimiento;
         private LinearLayout llyCVColores,llyTrasladoLogistico;
         private CardView cv;
 
@@ -194,11 +201,18 @@ public class HojaRutaDetalleAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             llyCVColores = itemView.findViewById(R.id.llyCVColores);
             llyTrasladoLogistico = itemView.findViewById(R.id.llyTrasladoLogistico);
 
+            lblCVnombreUbicacionOrigen = itemView.findViewById(R.id.lblCVnombreUbicacionOrigen);
+            lblCVnombreUbicacionDestino = itemView.findViewById(R.id.lblCVnombreUbicacionDestino);
+            lblCVnombreTipoMovimiento = itemView.findViewById(R.id.lblCVnombreTipoMovimiento);
+            lblCVtelefonoUbicacionDestino = itemView.findViewById(R.id.lblCVtelefonoUbicacionDestino);
+
+
             cv.setOnClickListener(this);
             lblIrAEntregarTraslado.setOnClickListener(this);
             lblIrARechazarTraslado.setOnClickListener(this);
             lblIniciarPaquete.setOnClickListener(this);
             lblAgregarImagen.setOnClickListener(this);
+            lblCVtelefonoUbicacionDestino.setOnClickListener(this);
 
         }
 
@@ -215,6 +229,8 @@ public class HojaRutaDetalleAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     mItemClickListener.onClickAgregarImagenPaquete(this,getLayoutPosition());
                 }else if (v == lblIniciarPaquete){
                     mItemClickListener.onClickIniciarPaquete(this,getLayoutPosition());
+                }else if (v == lblCVtelefonoUbicacionDestino){
+                    mItemClickListener.onClickTelefono(this,getLayoutPosition());
                 }
             }
         }

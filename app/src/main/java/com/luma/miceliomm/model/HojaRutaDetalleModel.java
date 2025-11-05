@@ -28,5 +28,11 @@ public class HojaRutaDetalleModel {
     public String imagenDeRecibidoTraslado ="";
     public String imagenDeEntregaTraslado="";
 
+    public String nombreTipoMovimiento="";
+    public String nombreUbicacionOrigen ="";
+    public String  nombreUbicacionDestino ="";
+
+    public String telefonoUbicacionDestino ="";
+
 
 }

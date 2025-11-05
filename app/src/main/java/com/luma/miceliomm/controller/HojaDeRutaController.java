@@ -262,12 +262,16 @@ public class HojaDeRutaController {
     }
     // </editor-fold>
 
+    public int selectCountTrasladoLogisticoEstado(String IdHojaRuta,String IdEstado){
+        return detalleDao.selectCountEstadoTrasladoLogistico(IdHojaRuta,IdEstado);
+    }
+
     // <editor-fold defaultstate="collapsed" desc="Buscar Detalle Local">
     private  AsyncBuscarDetalle asyncBuscarDetalle;
-    public void buscarDetalle(int idHojaRuja) {
+    public void buscarDetalle(int idHojaRuta , String idEstado) {
         recyclerView.setScrollingTouchSlop(0);
         asyncBuscarDetalle = new AsyncBuscarDetalle();
-        asyncBuscarDetalle.execute(String.valueOf(idHojaRuja));
+        asyncBuscarDetalle.execute(String.valueOf(idHojaRuta), idEstado);
     }
 
     private class AsyncBuscarDetalle extends AsyncTask<String, Void, ArrayList> {
@@ -275,7 +279,7 @@ public class HojaDeRutaController {
 
         @Override
         protected ArrayList doInBackground(String... strings) {
-            return detalleDao.selectDetalle(strings[0]);
+            return detalleDao.selectDetalle(strings[0],strings[1]);
         }
 
         @Override

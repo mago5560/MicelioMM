@@ -247,11 +247,12 @@ public class TrasladoLogisticaController {
                 if (response.code()==200 && response.isSuccessful()){
                     detalleDao.updateRecoleccionTrasladoLogistico(cls);
                     util.msgSnackBar(" Recoleccion Logistico Enviado...", context);
-                    if (detalleDao.existsTrasladoLogisticoNoRecolectado(cls.idHojaDeRuta)){
+                    hojaDeRutaDetalle(cls.idHojaDeRuta);
+                    /*if (detalleDao.existsTrasladoLogisticoNoRecolectado(cls.idHojaDeRuta)){
                         hojaDeRutaDetalle(cls.idHojaDeRuta);
                     }else {
                         iniciarHojaDeRuta(cls.idHojaDeRuta);
-                    }
+                    }*/
                 }else {
                     util.mensaje("Error al actualizar estado hoja ruta (Response Code Referencia:  " + response.code() + ")", ((Activity) context)).show();
                 }

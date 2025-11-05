@@ -125,19 +125,21 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/lblCVtelefonoUbicacionDestino"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="T. Paquetes: "
-                            android:textAlignment="center" />
-
-                        <TextView
-                            android:id="@+id/lblCVTotalBultos"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="--"
+                            android:text="000000"
                             android:textAlignment="center"
-                            android:textColor="@android:color/black"
-                            android:textStyle="bold" />
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:textColor="@android:color/holo_blue_light"
+                            android:drawableLeft="@drawable/phone_outgoing_icon"
+                            android:drawableTint="@android:color/holo_blue_light"
+                            android:gravity="center_vertical|center_horizontal"
+                            android:drawablePadding="5dp"
+                            android:textStyle="bold"
+                            android:visibility="gone"
+                            android:background="?attr/selectableItemBackground"/>
 
                     </LinearLayout>
 
@@ -165,6 +167,30 @@
                             android:textColor="@android:color/white" />
 
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="T. Paquetes: "
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:id="@+id/lblCVTotalBultos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="--"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
                 </RelativeLayout>
 
             </LinearLayout>

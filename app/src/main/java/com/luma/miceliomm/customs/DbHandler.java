@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 public class DbHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "miceliomm.sqlite";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public int getDbVersion(){
         return DATABASE_VERSION;
@@ -157,7 +157,8 @@ public class DbHandler extends SQLiteOpenHelper {
                     " idMotivoDeRechazoTraslado INTEGER,  " +
                     " imagenDeRecibidoTraslado TEXT,  " +
                     " imagenDeEntregadoTraslado TEXT,  " +
-                    " fechaDeEntregaTraslado TEXT  " +
+                    " fechaDeEntregaTraslado TEXT,  " +
+                    " nombreTipoMovimiento TEXT  " +
                     " );";
 
     private static  final String TrasladoImagenAdicional =
@@ -190,14 +191,11 @@ public class DbHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Manejo de migraciones
-        db.execSQL("DROP TABLE IF EXISTS TblVehiculos");
-        db.execSQL("DROP TABLE IF EXISTS TblEstados");
-        db.execSQL("DROP TABLE IF EXISTS TblPiloto");
-        db.execSQL("DROP TABLE IF EXISTS TblMotivos");
-        db.execSQL("DROP TABLE IF EXISTS TblSector");
-        db.execSQL("DROP TABLE IF EXISTS TblHojaRuta");
-        db.execSQL("DROP TABLE IF EXISTS TblTrasladoImagenAdicional");
-        onCreate(db);
+        if ( getDbVersion() == 2){
+            db.execSQL("DROP TABLE IF EXISTS TblHojaRuta");
+            db.execSQL(HojaRuta);
+        }
+
     }
 
 

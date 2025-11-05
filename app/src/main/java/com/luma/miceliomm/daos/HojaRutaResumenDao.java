@@ -30,6 +30,7 @@ public class HojaRutaResumenDao {
                 " ,a.hojaDeRutaKmFinal ,a.hojaDeRutaFechaHoraRegreso "+
                 " ,a.hojaDeRutaLatitudInicial , a.hojaDeRutaLongitudInicial "+
                 " ,a.hojaDeRutaLatitudFinal , a.hojaDeRutaLongitudFinal "+
+                //" , a.telefonoUbicacionDestino "+
                 " FROM TblHojaRuta a " +
                 " LEFT JOIN TblSector b ON a.idSectorLogistico = b.idSectorLogistico" +
                 " LEFT JOIN TblEstados c ON a.hojaDeRutaEstado = c.idEstado" +
@@ -40,6 +41,7 @@ public class HojaRutaResumenDao {
                 " ,a.hojaDeRutaKmFinal ,a.hojaDeRutaFechaHoraRegreso "+
                 " ,a.hojaDeRutaLatitudInicial , a.hojaDeRutaLongitudInicial "+
                 " ,a.hojaDeRutaLatitudFinal , a.hojaDeRutaLongitudFinal "+
+                //" , a.telefonoUbicacionDestino "+
                 " ORDER BY a.hojaDeRutaEstado asc, a.idHojaDeRuta asc"
                 ;
 
@@ -61,6 +63,7 @@ public class HojaRutaResumenDao {
             v.nombrePiloto = cursor.getString(cursor.getColumnIndexOrThrow("nombrePiloto"));
             v.fecha = cursor.getString(cursor.getColumnIndexOrThrow("fecha"));
             v.totalBultos = cursor.getInt(cursor.getColumnIndexOrThrow("totalBultos"));
+           // v.telefonoUbicacionDestino = cursor.getString(cursor.getColumnIndexOrThrow("telefonoUbicacionDestino"));
 
             cls.vale  = cursor.getInt(cursor.getColumnIndexOrThrow("hojaDeRutaVale"));
             cls.otrosGastos = cursor.getInt(cursor.getColumnIndexOrThrow("hojaDeRutaOtrosGastos"));
@@ -94,6 +97,7 @@ public class HojaRutaResumenDao {
                 " ,a.hojaDeRutaKmFinal ,a.hojaDeRutaFechaHoraRegreso"+
                 " ,a.hojaDeRutaLatitudInicial , a.hojaDeRutaLongitudInicial "+
                 " ,a.hojaDeRutaLatitudFinal , a.hojaDeRutaLongitudFinal "+
+               // " , a.telefonoUbicacionDestino "+
                 " FROM TblHojaRuta a " +
                 " LEFT JOIN TblSector b ON a.idSectorLogistico = b.idSectorLogistico" +
                 " LEFT JOIN TblEstados c ON a.hojaDeRutaEstado = c.idEstado" +
@@ -104,6 +108,7 @@ public class HojaRutaResumenDao {
                 " ,a.hojaDeRutaKmFinal ,a.hojaDeRutaFechaHoraRegreso " +
                 " ,a.hojaDeRutaLatitudInicial , a.hojaDeRutaLongitudInicial "+
                 " ,a.hojaDeRutaLatitudFinal , a.hojaDeRutaLongitudFinal "
+               // " , a.telefonoUbicacionDestino "
                 ;
 
 
@@ -121,6 +126,7 @@ public class HojaRutaResumenDao {
             v.nombrePiloto = cursor.getString(cursor.getColumnIndexOrThrow("nombrePiloto"));
             v.fecha = cursor.getString(cursor.getColumnIndexOrThrow("fecha"));
             v.totalBultos = cursor.getInt(cursor.getColumnIndexOrThrow("totalBultos"));
+          //  v.telefonoUbicacionDestino = cursor.getString(cursor.getColumnIndexOrThrow("telefonoUbicacionDestino"));
 
             cls.vale  = cursor.getInt(cursor.getColumnIndexOrThrow("hojaDeRutaVale"));
             cls.otrosGastos = cursor.getInt(cursor.getColumnIndexOrThrow("hojaDeRutaOtrosGastos"));

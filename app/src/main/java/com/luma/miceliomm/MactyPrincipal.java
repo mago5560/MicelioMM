@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -94,22 +95,15 @@ public class MactyPrincipal extends AppCompatActivity  {
     private static final int  MY_PERMISSIONS_REQUEST_CAMERA= 2;
     private static  final int MY_PERMISSIONS_REQUEST_INTETNER = 3;
     private static  final int MY_PERMISSIONS_REQUEST_GPS = 4;
+    private static final int REQUEST_CALL_PHONE = 5;
 
 
     private void permisosAPI(){
         int STORAGE = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int CAMERA = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
         int GPS = ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION);
+        int PHONE = ContextCompat.checkSelfPermission(this,Manifest.permission.CALL_PHONE);
 
-        if (STORAGE != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-            }
-        }
 
         if(GPS != PackageManager.PERMISSION_GRANTED){
             if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_COARSE_LOCATION)){
@@ -117,10 +111,6 @@ public class MactyPrincipal extends AppCompatActivity  {
             }else{
                 ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},MY_PERMISSIONS_REQUEST_GPS);
             }
-        }
-
-        if (STORAGE == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
         }
 
         if(GPS == PackageManager.PERMISSION_DENIED){
@@ -142,6 +132,38 @@ public class MactyPrincipal extends AppCompatActivity  {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
         }
 
+        if (PHONE!= PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.CALL_PHONE)) {
+
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL_PHONE);
+            }
+        }
+
+        if (PHONE == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL_PHONE);
+        }
+
+        /* ----------  STORAGE  ---------- */
+       // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {   // API 33+
+            // targetSdk >= 33 → WRITE_EXTERNAL_STORAGE no existe
+            // Pide solo los que uses
+
+            if (STORAGE != PackageManager.PERMISSION_GRANTED) {
+
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                } else {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                }
+            }
+            if (STORAGE == PackageManager.PERMISSION_DENIED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+            }
+       // }
 
 
     }
@@ -183,6 +205,14 @@ public class MactyPrincipal extends AppCompatActivity  {
                     permisosAPI();
                 } else {
                     util.msgSnackBar("El Permiso de GPS es requerida", this);
+                }
+                return;
+            }
+            case REQUEST_CALL_PHONE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    permisosAPI();
+                } else {
+                    util.msgSnackBar("El Permiso de Telefono es requerida", this);
                 }
                 return;
             }

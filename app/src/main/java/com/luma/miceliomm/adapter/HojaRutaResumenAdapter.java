@@ -14,6 +14,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.luma.miceliomm.R;
 import com.luma.miceliomm.model.HojaRutaResumenModel;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +32,7 @@ public class HojaRutaResumenAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public interface OnItemClickListener {
         public void onClick(ItemAdapterViewHolder holder, int position);
+        //public void onClickTelefono(ItemAdapterViewHolder holder, int position);
     }
 
     public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
@@ -69,7 +73,7 @@ public class HojaRutaResumenAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             holderItem.lblCVnombrePiloto.setText(cls.nombrePiloto);
             holderItem.lblCVfecha.setText(cls.fecha);
             holderItem.lblCVTotalBultos.setText(String.valueOf(cls.totalBultos));
-
+           // holderItem.lblCVtelefonoUbicacionDestino.setText(cls.telefonoUbicacionDestino);
             holderItem.lblCVnombreEstado.setText(cls.hojaRutaNombreEstado);
 
             //ConfiguracionDeColor
@@ -151,6 +155,7 @@ public class HojaRutaResumenAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public class ItemAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView lblCVidHojaDeRuta,lblCVnombreSectorLogistico, lblCVnombrePiloto,lblCVfecha,lblCVTotalBultos;
+        private TextView lblCVtelefonoUbicacionDestino;
         private CardView cv;
 
         private TextView lblCVnombreEstado;
@@ -167,7 +172,10 @@ public class HojaRutaResumenAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             lblCVnombreEstado = itemView.findViewById(R.id.lblCVnombreEstado);
             llyCVColores = itemView.findViewById(R.id.llyCVColores);
+            lblCVtelefonoUbicacionDestino = itemView.findViewById(R.id.lblCVtelefonoUbicacionDestino);
+
             cv.setOnClickListener(this);
+           // lblCVtelefonoUbicacionDestino.setOnClickListener(this);
         }
 
         @Override
@@ -176,6 +184,9 @@ public class HojaRutaResumenAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 if (v == cv) {
                     mItemClickListener.onClick(this, getLayoutPosition());
                 }
+               // else if (v == lblCVtelefonoUbicacionDestino){
+                //    mItemClickListener.onClickTelefono(this , getLayoutPosition());
+               // }
             }
         }
 

@@ -12,6 +12,8 @@
     <color name="color_accent">#824c76</color>
     <color name="color_accent_dark">#6c5464</color>
 
+    <color name="color_select_card">#FFC7EB</color>
+
 
     <color name="color_borrador">#f9423a</color>
     <color name="color_cerrado">#f6a04d</color>

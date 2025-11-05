@@ -263,4 +263,7 @@ public class HojaRutaModel {
     @SerializedName("fechaDeEntregaTraslado")
     public String fechaDeEntregaTraslado;
 
+    @SerializedName("nombreTipoMovimiento")
+    public String nombreTipoMovimiento;
+
 }
