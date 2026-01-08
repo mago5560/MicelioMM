@@ -6,14 +6,24 @@ import com.google.gson.annotations.SerializedName;
 public class LogUbicacionModel {
     @SerializedName("latitud")
     @Expose
-    private int latitud= 0;
+    public int latitud= 0;
     @SerializedName("longitud")
     @Expose
-    private int longitud= 0;
+    public int longitud= 0;
     @SerializedName("idPersonal")
     @Expose
-    private int idPersonal= 0;
+    public int idPersonal= 0;
     @SerializedName("idVehiculo")
     @Expose
-    private int idVehiculo= 0;
+    public int idVehiculo= 0;
+
+    @Override
+    public String toString() {
+        return "LogUbicacionModel{" +
+                "latitud=" + latitud +
+                ", longitud=" + longitud +
+                ", idPersonal=" + idPersonal +
+                ", idVehiculo=" + idVehiculo +
+                '}';
+    }
 }

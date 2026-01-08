@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +26,7 @@ import com.luma.miceliomm.customs.DbHandler;
 import com.luma.miceliomm.customs.FunctionCustoms;
 import com.luma.miceliomm.customs.GlobalCustoms;
 import com.luma.miceliomm.customs.HttpsInseguraHELP;
+import com.luma.miceliomm.customs.ServicesExtrasCustoms;
 import com.luma.miceliomm.daos.HojaRutaDao;
 import com.luma.miceliomm.daos.HojaRutaDetalleDao;
 import com.luma.miceliomm.daos.HojaRutaResumenDao;
@@ -33,6 +36,8 @@ import com.luma.miceliomm.model.HojaRutaModel;
 import com.luma.miceliomm.model.HojaRutaResumenModel;
 import com.luma.miceliomm.service.ApiClient;
 import com.luma.miceliomm.service.ApiService;
+import com.luma.miceliomm.service.LocationService;
+
 import java.util.ArrayList;
 
 import okhttp3.ResponseBody;
@@ -56,6 +61,8 @@ public class HojaDeRutaController {
     private SwipeRefreshLayout swipeRefreshLayout;
     private HojaRutaResumenAdapter resumenAdapter;
     private HojaRutaDetalleAdapter detalleAdapter;
+
+    private ServicesExtrasCustoms extras = ServicesExtrasCustoms.getInstance();
 
     public HojaDeRutaController(Context context) {
         this.context = context;
@@ -333,8 +340,14 @@ public class HojaDeRutaController {
                 if (response.code()==200 && response.isSuccessful()){
                     if (Inicio == 1){
                         detalleDao.updateHojaRutaIniciada(cls);
+                        //inicioServicio(cls.idHojaDeRuta,0);
+                        extras.setIdPiloto(cls.idPiloto);
+                        extras.setIdVehiculo(cls.idVehiculo);
                     }else if (Final == 1){
+                        //finalizarSerivico();
                        detalleDao.updateHojaRutaFinal(cls);
+                        extras.setIdPiloto(0);
+                        extras.setIdVehiculo(0);
                     }
                     util.msgSnackBar("Actualizacion enviada...", context);
                     hojaDeRutaDetalle(cls.idHojaDeRuta);
@@ -357,6 +370,23 @@ public class HojaDeRutaController {
     // </editor-fold>
 
 
+    private void inicioServicio(){
+        Log.i("MicelioApp","inicio de ruta");
+        //((Activity) context).startService(new Intent(context, LocationService.class));
+        Intent intent = new Intent(context, LocationService.class);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ((Activity)context).startForegroundService(intent);
+        } else {
+            ((Activity)context).startService(intent);
+        }
+    }
+
+    private void finalizarSerivico(){
+        Log.i("MicelioApp","fin de ruta");
+        ((Activity) context).stopService(new Intent(context, LocationService.class));
+
+    }
 
     private void hojaDeRutaDetalle(int idHojaDeRuta){
         Intent intent = new Intent().setClass(context, MactyHojaRutaDetalle.class);

@@ -8,6 +8,7 @@ public class HojaRutaResumenModel {
     public int idSectorLogistico =0;
     public String nombreSectorLogistico="";
     public int idPiloto=0;
+    public int idVehiculo = 0;
     public String nombrePiloto ="";
     public int totalBultos=0;
     public String fecha="";

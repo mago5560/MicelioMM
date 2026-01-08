@@ -13,11 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.luma.miceliomm.R;
 import com.luma.miceliomm.model.HojaRutaDetalleModel;
-import com.luma.miceliomm.model.HojaRutaResumenModel;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,16 +84,15 @@ public class HojaRutaDetalleAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             holderItem.lblCVnombreUbicacionDestino.setText(cls.nombreUbicacionDestino);
             holderItem.lblCVnombreTipoMovimiento.setText(cls.nombreTipoMovimiento);
 
-            if (cls.idEstado <= 3){
+            if (cls.hojaDeRutaEstado != 8){
+                if (cls.idEstado <= 3){
                     holderItem.lblIniciarPaquete.setVisibility(View.VISIBLE);
                     holderItem.llyTrasladoLogistico.setVisibility(View.GONE);
-            }else if (cls.idEstado  == 4 || cls.idEstado  == 5 && cls.hojaDeRutaEstado == 5){
-                holderItem.lblIniciarPaquete.setVisibility(View.GONE);
-                holderItem.llyTrasladoLogistico.setVisibility(View.VISIBLE);
+                }else if (cls.idEstado  == 4 || cls.idEstado  == 5 && cls.hojaDeRutaEstado == 5){
+                    holderItem.lblIniciarPaquete.setVisibility(View.GONE);
+                    holderItem.llyTrasladoLogistico.setVisibility(View.VISIBLE);
+                }
             }
-
-
-
 
             //ConfiguracionDeColor
             configurarEstado(holderItem.lblCVnombreEstado,cls.idEstado, holderItem.llyCVColores);

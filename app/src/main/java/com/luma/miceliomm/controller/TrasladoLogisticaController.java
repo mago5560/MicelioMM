@@ -150,6 +150,9 @@ public class TrasladoLogisticaController {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.code()==200 && response.isSuccessful()){
                     detalleDao.updateRecoleccionTrasladoLogistico(cls);
+                    detalleDao.updateTrasladoLogistico(trasladoLogisticaModel);
+                    util.msgSnackBar(" Traslado Logistico Enviado...", context);
+                    /*
                     if (detalleDao.existsTrasladoLogisticoEnRuta(cls.idHojaDeRuta)){
                         detalleDao.updateTrasladoLogistico(trasladoLogisticaModel);
                         util.msgSnackBar(" Traslado Logistico Enviado...", context);
@@ -157,6 +160,7 @@ public class TrasladoLogisticaController {
                     }else {
                         finalizarHojaDeRuta(cls.idHojaDeRuta);
                     }
+                     */
                 }else {
                     util.mensaje("Error al Actualizar Estado Hoja de Ruta Traslado (Response Code Referencia:  " + response.code() + ")", ((Activity) context)).show();
                 }

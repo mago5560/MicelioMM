@@ -24,7 +24,7 @@ public class HojaRutaResumenDao {
         // INNER JOIN entre Paquetes y Rutas
         //      " WHERE a.fecha = ? " +
         String sql = "SELECT a.idHojaDeRuta, a.hojaDeRutaEstado, c.nombre AS hojaDeRutaNombreEstado , a.idSectorLogistico, b.nombre AS nombreSectorLogistico," +
-                "   a.idPiloto, a.nombrePiloto , a.fecha " +
+                "   a.idPiloto, a.nombrePiloto ,a.idVehiculo, a.fecha " +
                 " , SUM(a.bultos) as totalBultos " +
                 " ,a.hojaDeRutaVale, a.hojaDeRutaOtrosGastos ,a.hojaDeRutaFechaHoraSalida ,a.hojaDeRutaKmInicial,a.hojaDeRutaGalones " +
                 " ,a.hojaDeRutaKmFinal ,a.hojaDeRutaFechaHoraRegreso "+
@@ -36,7 +36,7 @@ public class HojaRutaResumenDao {
                 " LEFT JOIN TblEstados c ON a.hojaDeRutaEstado = c.idEstado" +
                 " WHERE a.fecha BETWEEN ? AND ? "+
                 " GROUP BY a.idHojaDeRuta, a.hojaDeRutaEstado, c.nombre, " +
-                " a.idSectorLogistico, b.nombre , a.idPiloto, a.nombrePiloto, a.fecha" +
+                " a.idSectorLogistico, b.nombre , a.idPiloto, a.nombrePiloto,a.idVehiculo, a.fecha" +
                 " ,a.hojaDeRutaVale, a.hojaDeRutaOtrosGastos ,a.hojaDeRutaFechaHoraSalida ,a.hojaDeRutaKmInicial,a.hojaDeRutaGalones " +
                 " ,a.hojaDeRutaKmFinal ,a.hojaDeRutaFechaHoraRegreso "+
                 " ,a.hojaDeRutaLatitudInicial , a.hojaDeRutaLongitudInicial "+
@@ -61,6 +61,7 @@ public class HojaRutaResumenDao {
             v.nombreSectorLogistico = cursor.getString(cursor.getColumnIndexOrThrow("nombreSectorLogistico"));
             v.idPiloto = cursor.getInt(cursor.getColumnIndexOrThrow("idPiloto"));
             v.nombrePiloto = cursor.getString(cursor.getColumnIndexOrThrow("nombrePiloto"));
+            v.idVehiculo = cursor.getInt(cursor.getColumnIndexOrThrow("idVehiculo"));
             v.fecha = cursor.getString(cursor.getColumnIndexOrThrow("fecha"));
             v.totalBultos = cursor.getInt(cursor.getColumnIndexOrThrow("totalBultos"));
            // v.telefonoUbicacionDestino = cursor.getString(cursor.getColumnIndexOrThrow("telefonoUbicacionDestino"));
@@ -91,7 +92,7 @@ public class HojaRutaResumenDao {
         HojaRutaResumenModel v = new HojaRutaResumenModel();
 
         String sql = "SELECT a.idHojaDeRuta, a.hojaDeRutaEstado, c.nombre hojaDeRutaNombreEstado , a.idSectorLogistico, b.nombre nombreSectorLogistico," +
-                "   a.idPiloto, a.nombrePiloto , a.fecha " +
+                "   a.idPiloto,a.idVehiculo, a.nombrePiloto , a.fecha " +
                 " , SUM(a.bultos) as totalBultos " +
                 " ,a.hojaDeRutaVale, a.hojaDeRutaOtrosGastos ,a.hojaDeRutaFechaHoraSalida ,a.hojaDeRutaKmInicial,a.hojaDeRutaGalones " +
                 " ,a.hojaDeRutaKmFinal ,a.hojaDeRutaFechaHoraRegreso"+
@@ -103,7 +104,7 @@ public class HojaRutaResumenDao {
                 " LEFT JOIN TblEstados c ON a.hojaDeRutaEstado = c.idEstado" +
                 " WHERE a.idHojaDeRuta  = ? " +
                 " GROUP BY a.idHojaDeRuta, a.hojaDeRutaEstado, c.nombre, " +
-                " a.idSectorLogistico, b.nombre , a.idPiloto, a.nombrePiloto, a.fecha" +
+                " a.idSectorLogistico, b.nombre , a.idPiloto,a.idVehiculo, a.nombrePiloto, a.fecha" +
                 " ,a.hojaDeRutaVale, a.hojaDeRutaOtrosGastos ,a.hojaDeRutaFechaHoraSalida ,a.hojaDeRutaKmInicial,a.hojaDeRutaGalones " +
                 " ,a.hojaDeRutaKmFinal ,a.hojaDeRutaFechaHoraRegreso " +
                 " ,a.hojaDeRutaLatitudInicial , a.hojaDeRutaLongitudInicial "+
@@ -124,6 +125,7 @@ public class HojaRutaResumenDao {
             v.nombreSectorLogistico = cursor.getString(cursor.getColumnIndexOrThrow("nombreSectorLogistico"));
             v.idPiloto = cursor.getInt(cursor.getColumnIndexOrThrow("idPiloto"));
             v.nombrePiloto = cursor.getString(cursor.getColumnIndexOrThrow("nombrePiloto"));
+            v.idVehiculo = cursor.getInt(cursor.getColumnIndexOrThrow("idVehiculo"));
             v.fecha = cursor.getString(cursor.getColumnIndexOrThrow("fecha"));
             v.totalBultos = cursor.getInt(cursor.getColumnIndexOrThrow("totalBultos"));
           //  v.telefonoUbicacionDestino = cursor.getString(cursor.getColumnIndexOrThrow("telefonoUbicacionDestino"));

@@ -1,5 +1,6 @@
 package com.luma.miceliomm.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ import com.luma.miceliomm.controller.UsuarioController;
 import com.luma.miceliomm.customs.FunctionCustoms;
 import com.luma.miceliomm.customs.GlobalCustoms;
 import com.luma.miceliomm.model.MenuModel;
+import com.luma.miceliomm.service.LocationService;
 
 import java.util.ArrayList;
 
@@ -109,6 +112,7 @@ public class FragmOpciones extends Fragment  implements MenuAdapter.OnItemClickL
                 descargarRuta();
                 break;
             case 0:
+                finalizarSerivico();
                 usuarioControler.setLogout();
                 break;
             default:
@@ -142,6 +146,12 @@ public class FragmOpciones extends Fragment  implements MenuAdapter.OnItemClickL
     private void descargarRuta(){
         HojaDeRutaController controller = new HojaDeRutaController(getContext());
         controller.dialogDescargaRuta();
+    }
+
+    private void finalizarSerivico(){
+        Log.i("MicelioApp","fin de ruta");
+        getActivity().stopService(new Intent(getContext(), LocationService.class));
+
     }
 
 

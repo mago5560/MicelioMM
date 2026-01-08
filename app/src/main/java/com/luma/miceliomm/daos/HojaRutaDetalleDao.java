@@ -348,7 +348,7 @@ public class HojaRutaDetalleDao {
     public long updateHojaRutaIniciada (ActualizaHojaDeRutaModel cls){
         ContentValues values = new ContentValues();
         values.put("hojaDeRutaEstado", cls.idEstado);
-        values.put("idEstado",cls.idEstado);
+      //  values.put("idEstado",cls.idEstado);
         values.put("hojaDeRutaVale",cls.vale);
         values.put("hojaDeRutaOtrosGastos",cls.otrosGastos);
         values.put("hojaDeRutaFechaHoraSalida",cls.fechaHoraSalida);
@@ -364,7 +364,7 @@ public class HojaRutaDetalleDao {
     public long updateHojaRutaFinal (ActualizaHojaDeRutaModel cls){
         ContentValues values = new ContentValues();
         values.put("hojaDeRutaEstado", cls.idEstado);
-        values.put("idEstado",cls.idEstado);
+       // values.put("idEstado",cls.idEstado);
         values.put("hojaDeRutaVale",cls.vale);
         values.put("hojaDeRutaOtrosGastos",cls.otrosGastos);
         values.put("hojaDeRutaFechaHoraRegreso",cls.fechaHoraRegreso);

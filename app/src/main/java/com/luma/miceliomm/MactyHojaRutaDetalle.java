@@ -350,16 +350,16 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
     }
 
     private void recolectarTraslado(int idHojaDeRuta, int idTraslado, int idTrasladoLogistica){
-        if ( !hojaDeRutaController.existsHojaEnRuta() ) {
+       // if ( !hojaDeRutaController.existsHojaEnRuta() ) {
         intent = new Intent().setClass(this, MactyRecoleccionTraslado.class);
         intent.putExtra("idHojaRuta",idHojaDeRuta);
         intent.putExtra("idTraslado",idTraslado);
         intent.putExtra("idTrasladoLogistica",idTrasladoLogistica);
         startActivity(intent);
         finish();
-        }else{
+        /*}else{
             util.mensaje("Existe Hoja de Traslados pendientes en finalizar, favor de verificar.",this).show();
-        }
+       }*/
     }
 
     private void trasladoImagenAdicional(int idHojaDeRuta, int idTraslado, int idTrasladoLogistica){
@@ -386,16 +386,15 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
     }
 
     private void finalizarHojaDeRuta(){
-      //  if ( !hojaDeRutaController.existsTrasladoLogisticoEnRuta(idHojaRuta) ) {
+        if ( !hojaDeRutaController.existsTrasladoLogisticoEnRuta(idHojaRuta) ) {
             intent = new Intent().setClass(this, MactyActualizarHojaRuta.class);
             intent.putExtra("idHojaRuta", idHojaRuta);
             intent.putExtra("iniciar", 0);
             intent.putExtra("finalizar", 1);
             startActivity(intent);
             finish();
-       // }else{
-        //    util.mensaje("Aun hay traslados sin entregar para finalizar la Hoja de Ruta, verifique",this).show();
-       // }
+        }else{
+            util.mensaje("Aun hay traslados sin entregar para finalizar la Hoja de Ruta, verifique",this).show();}
     }
 
     private void verImagenAdicional(int idHojaDeRuta, int idTraslado, int idTrasladoLogistica){

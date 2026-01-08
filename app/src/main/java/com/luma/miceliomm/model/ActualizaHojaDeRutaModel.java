@@ -57,4 +57,7 @@ public class ActualizaHojaDeRutaModel {
     @Expose
     public String longitudFinal = "";
 
+    public int idPiloto=0;
+    public int idVehiculo =0;
+
 }

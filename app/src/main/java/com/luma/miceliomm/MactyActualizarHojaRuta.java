@@ -42,6 +42,8 @@ public class MactyActualizarHojaRuta extends AppCompatActivity implements Locati
     private HojaDeRutaController hojaDeRutaController;
     private ActualizaHojaDeRutaModel actualizaHojaDeRutaModel;
 
+    private int idPiloto=0, idVehiculo = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,8 +160,11 @@ public class MactyActualizarHojaRuta extends AppCompatActivity implements Locati
             actualizaHojaDeRutaModel.galones =  Double.valueOf(galones);
             actualizaHojaDeRutaModel.vale =  Integer.valueOf(vale);
             actualizaHojaDeRutaModel.otrosGastos =  Double.valueOf(otrosGastos);
-            hojaDeRutaController.actualizarHojaRuta(actualizaHojaDeRutaModel, iniciar,finalizar);
 
+            actualizaHojaDeRutaModel.idVehiculo =this.idVehiculo;
+            actualizaHojaDeRutaModel.idPiloto = this.idPiloto;
+
+            hojaDeRutaController.actualizarHojaRuta(actualizaHojaDeRutaModel, iniciar,finalizar);
         }
     }
 
@@ -186,6 +191,9 @@ public class MactyActualizarHojaRuta extends AppCompatActivity implements Locati
         ((TextView) findViewById(R.id.lblCVfecha)) .setText(v.fecha);
         ((TextView) findViewById(R.id.lblCVTotalBultos)) .setText(String.valueOf(v.totalBultos));
         ((TextView) findViewById(R.id.lblCVnombreEstado)).setText(v.hojaRutaNombreEstado);
+        this.idPiloto = v.idPiloto;
+        this.idVehiculo = v.idVehiculo;
+
 
         //ConfiguracionDeColor
         configurarEstado(((TextView) findViewById(R.id.lblCVnombreEstado)),v.hojaDeRutaEstado, ((LinearLayout) findViewById(R.id.llyCVColores)));
@@ -308,12 +316,14 @@ public class MactyActualizarHojaRuta extends AppCompatActivity implements Locati
 
     @Override
     public void onLocationError(String error) {
+        ((TextView) findViewById(R.id.tvUbicacion)).setVisibility(View.VISIBLE);
         ((TextView) findViewById(R.id.tvUbicacion)) .setText("Error: " + error);
         util.msgToast(error,this);
     }
 
     @Override
     public void onPermissionsDenied() {
+        ((TextView) findViewById(R.id.tvUbicacion)).setVisibility(View.VISIBLE);
         ((TextView) findViewById(R.id.tvUbicacion)) .setText("Permisos denegados - No se puede obtener ubicación");
         util.msgToast("Los permisos de ubicación son necesarios",this);
     }
@@ -329,7 +339,10 @@ public class MactyActualizarHojaRuta extends AppCompatActivity implements Locati
     private void startLocationUpdates() {
         if (locationController.isGPSEnabled()) {
             locationController.startLocationUpdates();
+            ((TextView) findViewById(R.id.tvUbicacion)).setVisibility(View.GONE);
+            ((TextView) findViewById(R.id.tvUbicacion)) .setText("");
         } else {
+            ((TextView) findViewById(R.id.tvUbicacion)).setVisibility(View.VISIBLE);
             ((TextView) findViewById(R.id.tvUbicacion)) .setText("GPS deshabilitado - Active el GPS");
             util.msgToast("Active el GPS para obtener ubicación precisa",this);
         }

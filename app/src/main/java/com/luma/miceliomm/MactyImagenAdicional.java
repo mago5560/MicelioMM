@@ -161,7 +161,7 @@ public class MactyImagenAdicional extends AppCompatActivity implements ImagenAdi
         Log.d("PICASSO_DEBUG", "Intentando cargar: " + imageUrl);
 
         picasso.load(imageUrl)
-                .placeholder(R.drawable.cargando)
+                .placeholder(R.drawable.no_camara)
                 .error(R.drawable.no_camara)
                 .fit()
                 .centerCrop()
