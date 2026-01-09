@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
@@ -67,6 +69,7 @@ public class LocationService extends Service implements
         return null;
     }
 
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
@@ -74,6 +77,21 @@ public class LocationService extends Service implements
             googleApiClient.connect();
         return START_STICKY;
     }
+
+
+    /*
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (!googleApiClient.isConnected())
+                googleApiClient.connect();
+        }, 1000);
+
+        return START_STICKY;
+    }
+     */
+
 
     @Override
     public void onDestroy() {
@@ -97,8 +115,9 @@ public class LocationService extends Service implements
     private void createLocationRequest() {
         locationRequest = new LocationRequest();
         locationRequest.setInterval(10000); // 10 seconds
-        locationRequest.setFastestInterval(5000); // 5 seconds
-       // locationRequest.setFastestInterval(300000); // 3 minutos
+        //locationRequest.setFastestInterval(5000); // 5 seconds
+      // locationRequest.setFastestInterval(300000); // 3 minutos
+        locationRequest.setFastestInterval(500000); // 5 minutos
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
 

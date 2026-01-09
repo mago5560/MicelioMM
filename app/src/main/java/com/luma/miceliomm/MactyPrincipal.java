@@ -8,6 +8,8 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Lifecycle;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,6 +55,18 @@ public class MactyPrincipal extends AppCompatActivity  {
         setUpNavigation();
         permisosAPI();
 
+        //inicioServicio();
+       // iniciarServicioSiPermisosOK();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Esperar a que el sistema termine startup
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            permisosAPI();
+        }, 800);
     }
 
     private void findViewsByIds() {
@@ -105,6 +120,22 @@ public class MactyPrincipal extends AppCompatActivity  {
         }
 
     }
+
+    private void iniciarServicioSiPermisosOK() {
+
+        if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+            return;
+        }
+
+        Intent intent = new Intent(this, LocationService.class);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent);
+        } else {
+            startService(intent);
+        }
+    }
+
 
     // <editor-fold defaultstate="collapsed" desc="(PERMISOS)">
     // <editor-fold defaultstate="collapsed" desc="(PERMISOS CORREGIDOS Y ESTABLES)">
@@ -168,7 +199,8 @@ public class MactyPrincipal extends AppCompatActivity  {
         }
 
         // TODOS LOS PERMISOS CONCEDIDOS
-        inicioServicio();
+       // inicioServicio();
+        iniciarServicioSiPermisosOK();
     }
 
     /* ===================== VALIDACIONES ===================== */
@@ -225,6 +257,7 @@ public class MactyPrincipal extends AppCompatActivity  {
 
         switch (requestCode) {
 
+            /*
             case LOCATION_FOREGROUND_REQUEST:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     permisosAPI(); // Continúa flujo
@@ -232,6 +265,17 @@ public class MactyPrincipal extends AppCompatActivity  {
                     util.msgSnackBar("Permiso de ubicación requerido", this);
                 }
                 break;
+             */
+            case LOCATION_FOREGROUND_REQUEST:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        permisosAPI();
+                    }, 500);
+                } else {
+                    util.msgSnackBar("Permiso de ubicación requerido", this);
+                }
+                break;
+
 
             case LOCATION_BACKGROUND_REQUEST:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
