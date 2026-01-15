@@ -114,9 +114,10 @@ public class LocationService extends Service implements
 
     private void createLocationRequest() {
         locationRequest = new LocationRequest();
-        locationRequest.setInterval(10000); // 10 seconds
-        //locationRequest.setFastestInterval(5000); // 5 seconds
-      // locationRequest.setFastestInterval(300000); // 3 minutos
+        //locationRequest.setInterval(10000); // 10 seconds
+        locationRequest.setInterval(500000); // 5 minutos
+       // locationRequest.setFastestInterval(5000); // 5 seconds
+       //locationRequest.setFastestInterval(300000); // 3 minutos
         locationRequest.setFastestInterval(500000); // 5 minutos
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 

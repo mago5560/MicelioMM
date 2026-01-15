@@ -152,6 +152,7 @@ public class TrasladoLogisticaController {
                     detalleDao.updateRecoleccionTrasladoLogistico(cls);
                     detalleDao.updateTrasladoLogistico(trasladoLogisticaModel);
                     util.msgSnackBar(" Traslado Logistico Enviado...", context);
+                    hojaDeRutaDetalle(cls.idHojaDeRuta);
                     /*
                     if (detalleDao.existsTrasladoLogisticoEnRuta(cls.idHojaDeRuta)){
                         detalleDao.updateTrasladoLogistico(trasladoLogisticaModel);

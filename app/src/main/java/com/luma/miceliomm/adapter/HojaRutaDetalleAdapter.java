@@ -71,7 +71,8 @@ public class HojaRutaDetalleAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         if (holder instanceof ItemAdapterViewHolder) {
             final HojaRutaDetalleModel cls = info.get(position);
             ItemAdapterViewHolder holderItem = (ItemAdapterViewHolder) holder;
-            holderItem.lblCVIdTrasladoLogistica.setText(String.valueOf(cls.idTrasladoLogistica));
+            //holderItem.lblCVIdTrasladoLogistica.setText(String.valueOf(cls.idTrasladoLogistica));
+            holderItem.lblCVIdTrasladoLogistica.setText(String.valueOf(cls.idTraslado));
             holderItem.lblCVobservaciones.setText(cls.observaciones);
             holderItem.lblCVReferencia.setText(String.valueOf(cls.referencia));
             holderItem.lblCVDireccionEntregaTraslado.setText(cls.direccionEntregaTraslado);

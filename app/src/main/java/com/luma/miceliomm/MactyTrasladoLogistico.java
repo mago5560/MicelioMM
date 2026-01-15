@@ -213,10 +213,12 @@ public class MactyTrasladoLogistico extends AppCompatActivity
             ((TextView) findViewById(R.id.lblTituloNavBar)).setText("Traslado Logistico Rechado");
             ((LinearLayout) findViewById(R.id.llyRechazoTraslado)).setVisibility(View.VISIBLE);
             ((Button) findViewById(R.id.btnGrabar)).setText("Rechazar");
+            trasladoLogisticaModel.idEstado = 7;
         }else {
             ((TextView) findViewById(R.id.lblTituloNavBar)).setText("Traslado Logistico Entrega");
             ((LinearLayout) findViewById(R.id.llyRechazoTraslado)).setVisibility(View.GONE);
             ((Button) findViewById(R.id.btnGrabar)).setText("Entrega");
+            trasladoLogisticaModel.idEstado = 6;
         }
 
 
@@ -235,7 +237,7 @@ public class MactyTrasladoLogistico extends AppCompatActivity
             trasladoLogisticaModel.latitudEntregaTraslado = Latitud;
             trasladoLogisticaModel.longitudEntregaTraslado = Longitud;
             trasladoLogisticaModel.fechaDeEntregaTraslado = util.getFechaHoraActualJson();
-            trasladoLogisticaModel.idEstado = 6;
+
             trasladoLogisticaController.setTrasladoLogistico(trasladoLogisticaModel);
 
         }
