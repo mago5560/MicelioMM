@@ -1,5 +1,7 @@
 package com.luma.miceliomm.customs;
 
+import java.util.ArrayList;
+
 public class FiltroHojaRutaIntance {
 
 
@@ -17,6 +19,8 @@ public class FiltroHojaRutaIntance {
 
     private String FechaInicial="";
     private String FechaFinal="";
+    private String SectorLogistico="";
+    private ArrayList<String> Filter = new ArrayList<>();
     private boolean Transferido= false;
     private boolean SinTransferir=true;
 
@@ -34,6 +38,23 @@ public class FiltroHojaRutaIntance {
 
     public void setFechaFinal(String fechaFinal) {
         FechaFinal = fechaFinal;
+    }
+
+
+    public String getSectorLogistico() {
+        return SectorLogistico;
+    }
+
+    public void setSectorLogistico(String sectorLogistico) {
+        SectorLogistico = sectorLogistico;
+    }
+
+    public ArrayList<String> getFilter() {
+        return Filter;
+    }
+
+    public void setFilter(ArrayList<String> filter) {
+        Filter = filter;
     }
 
     public boolean isTransferido() {

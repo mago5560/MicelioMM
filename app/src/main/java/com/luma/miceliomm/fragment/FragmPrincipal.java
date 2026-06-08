@@ -27,10 +27,12 @@ import com.luma.miceliomm.R;
 import com.luma.miceliomm.adapter.HojaRutaResumenAdapter;
 import com.luma.miceliomm.controller.HojaDeRutaController;
 import com.luma.miceliomm.customs.FiltroHojaRutaIntance;
+import com.luma.miceliomm.customs.FiltroPrincipalCustoms;
 import com.luma.miceliomm.customs.FunctionCustoms;
 import com.luma.miceliomm.model.HojaRutaResumenModel;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class FragmPrincipal extends Fragment implements HojaRutaResumenAdapter.OnItemClickListener {
 
@@ -43,6 +45,8 @@ public class FragmPrincipal extends Fragment implements HojaRutaResumenAdapter.O
     private ArrayList<HojaRutaResumenModel> hojaRutaResumenModelArrayList;
 
     private FiltroHojaRutaIntance filtroHojaRutaIntance = FiltroHojaRutaIntance.getInstance();
+
+    private FiltroPrincipalCustoms filtroPrincipalCustoms;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,6 +67,9 @@ public class FragmPrincipal extends Fragment implements HojaRutaResumenAdapter.O
 
     private void findViewsById(){
         util = new FunctionCustoms();
+        filtroPrincipalCustoms = new FiltroPrincipalCustoms();
+
+        ((TextView) view.findViewById(R.id.lblTituloNavBar)).setText("Hoja De Ruta Resumen");
 
         if(!filtroHojaRutaIntance.getFechaInicial().isEmpty()){
             ((TextView)  view.findViewById(R.id.lblFechaInicialBusqueda)).setText(filtroHojaRutaIntance.getFechaInicial());
@@ -78,6 +85,19 @@ public class FragmPrincipal extends Fragment implements HojaRutaResumenAdapter.O
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         ((RecyclerView) view.findViewById(R.id.grdDatos)).setLayoutManager(llm);
+
+        //set controller and adapter
+
+        hojaRutaResumenModelArrayList = new ArrayList<>();
+        hojaRutaResumenAdapter = new HojaRutaResumenAdapter(hojaRutaResumenModelArrayList, getContext(), this);
+        hojaDeRutaController = new HojaDeRutaController(getContext()
+                , ((RecyclerView) view.findViewById(R.id.grdDatos))
+                , ((LinearLayout) view.findViewById(R.id.emptyView))
+                , hojaRutaResumenAdapter
+                , ((SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh))
+        );
+        hojaDeRutaController.setControllerGrd(  ((TextView) view.findViewById(R.id.lblFechaActualizacion)),
+                ((TextView) view.findViewById(R.id.lblTotalRegistros)) );
     }
 
     private void actions(){
@@ -110,24 +130,32 @@ public class FragmPrincipal extends Fragment implements HojaRutaResumenAdapter.O
             }
         });
 
+        ((LinearLayout) view.findViewById(R.id.llyFiltro)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filtroPrincipalCustoms.setDependencias(hojaDeRutaController);
+                filtroPrincipalCustoms.show(getActivity().getSupportFragmentManager(),"filtro");
+            }
+        });
+
     }
 
     private void buscar(){
-        filtroHojaRutaIntance.setFechaInicial(((TextView) this.view.findViewById(R.id.lblFechaInicialBusqueda)).getText().toString() );
-        filtroHojaRutaIntance.setFechaFinal(((TextView) this.view.findViewById(R.id.lblFechaFinalBusqueda)).getText().toString());
 
-        hojaRutaResumenModelArrayList = new ArrayList<>();
-        hojaRutaResumenAdapter = new HojaRutaResumenAdapter(hojaRutaResumenModelArrayList, getContext(), this);
-        hojaDeRutaController = new HojaDeRutaController(getContext()
-                , ((RecyclerView) view.findViewById(R.id.grdDatos))
-                , ((LinearLayout) view.findViewById(R.id.emptyView))
-                , hojaRutaResumenAdapter
-                , ((SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh))
-        );
+        if(filtroHojaRutaIntance.getFechaInicial().isEmpty()){
+            filtroHojaRutaIntance.setFechaInicial( util.getFechaActual() );
+            filtroHojaRutaIntance.setFechaFinal( util.getFechaActual() );
+        }
 
+        /*
         hojaDeRutaController.buscar(util.formatDateDB ( ((TextView) view.findViewById(R.id.lblFechaInicialBusqueda)).getText().toString() )
                 ,util.formatDateDB ( ((TextView) view.findViewById(R.id.lblFechaFinalBusqueda)).getText().toString() ));
         ((TextView) view.findViewById(R.id.lblFechaActualizacion)).setText(util.getFechaHoraActual());
+         */
+        hojaDeRutaController.buscar(util.formatDateDB ( filtroHojaRutaIntance.getFechaInicial() )
+                ,util.formatDateDB ( filtroHojaRutaIntance.getFechaFinal() )
+                ,filtroHojaRutaIntance.getSectorLogistico()
+                ,filtroHojaRutaIntance.getFilter());
     }
 
 

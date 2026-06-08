@@ -6,9 +6,11 @@ import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
@@ -22,6 +24,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.luma.miceliomm.adapter.HojaRutaDetalleAdapter;
 import com.luma.miceliomm.adapter.HojaRutaResumenAdapter;
 import com.luma.miceliomm.controller.HojaDeRutaController;
@@ -40,8 +44,9 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
     private HojaDeRutaController hojaDeRutaController;
     private HojaRutaDetalleAdapter hojaRutaDetalleAdapter;
     private ArrayList<HojaRutaDetalleModel> hojaRutaDetalleModelArrayList;
-
     private CardView selectedCard;
+
+    private ArrayList<String> Filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +60,8 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
 
     private void findViewsById(){
         util = new FunctionCustoms();
+        Filter = new ArrayList<>();
+
         ((TextView) findViewById(R.id.lblTituloNavBar)).setText("Hoja De Ruta Detalle");
 
         //RecyclerView
@@ -65,6 +72,19 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
 
         ((CardView) findViewById(R.id.cvProgramado)).setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.color_select_card)));
         selectedCard = ((CardView) findViewById(R.id.cvProgramado));
+
+        //asignacion adapter
+        hojaRutaDetalleModelArrayList = new ArrayList<>();
+        hojaRutaDetalleAdapter = new HojaRutaDetalleAdapter(hojaRutaDetalleModelArrayList, this, this);
+        hojaDeRutaController = new HojaDeRutaController(this
+                , ((RecyclerView) findViewById(R.id.grdDatos))
+                , ((LinearLayout) findViewById(R.id.emptyView))
+                , hojaRutaDetalleAdapter
+                , ((SwipeRefreshLayout) findViewById(R.id.swipeRefresh))
+        );
+
+        hojaDeRutaController.setControllerGrd(  ((TextView) findViewById(R.id.lblFechaActualizacion)),
+                ((TextView) findViewById(R.id.lblTotalRegistros)) );
     }
 
     private void actions(){
@@ -104,6 +124,46 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
             }
         });
 
+        ((ImageView) findViewById(R.id.imgvwAbrirBuscador)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View vv) {
+                visibleFilter( true);
+            }
+        });
+
+        ((ImageView) findViewById(R.id.imgvwCerrarBuscador)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View vv) {
+                visibleFilter( false);
+            }
+        });
+
+        ((SearchView) findViewById(R.id.txtBuscador)).setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                s = s.trim();
+
+                if (!s.isEmpty()) {
+                    addChipToGroup(s);
+                    ((SearchView)  findViewById(R.id.txtBuscador)).setQuery("", false);
+                }
+
+                return true; // consume el evento
+
+                //return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+
+                if( s.length() > 1 && s.charAt(s.length()-1)== 32){
+                    addChipToGroup(s.substring(0,s.length()-1));
+                    ((SearchView)  findViewById(R.id.txtBuscador)).setQuery("", false);
+                }
+                //productoAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
     }
 
     private void getParametros(){
@@ -117,7 +177,7 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
     }
 
     private void fillDatos(){
-        hojaDeRutaController = new HojaDeRutaController(this);
+        ///hojaDeRutaController = new HojaDeRutaController(this);
         HojaRutaResumenModel v =  hojaDeRutaController.selectHojaRutaId(idHojaRuta);
         ((TextView) findViewById(R.id.lblCVidHojaDeRuta))  .setText(String.valueOf(v.idHoraRuta));
         ((TextView) findViewById(R.id.lblCVnombreSectorLogistico)) .setText(v.nombreSectorLogistico);
@@ -215,6 +275,42 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
 
     }
 
+    private void visibleFilter(  boolean visible) {
+        if (visible) {
+            ((LinearLayout) findViewById(R.id.llyFilter)).setVisibility(View.VISIBLE);
+            ((SearchView) findViewById(R.id.txtBuscador)).requestFocus();
+            ((ImageView) findViewById(R.id.imgvwAbrirBuscador)).setVisibility(View.GONE);
+        } else {
+            ((LinearLayout) findViewById(R.id.llyFilter)).setVisibility(View.GONE);
+            ((SearchView) findViewById(R.id.txtBuscador)).setQuery("", false);
+            ((ImageView) findViewById(R.id.imgvwAbrirBuscador)).setVisibility(View.VISIBLE);
+        }
+    }
+    private void addChipToGroup(String filtro) {
+        Chip chip = new Chip(this);
+        chip.setText(filtro);
+        Filter.add(filtro);
+        chip.setChipBackgroundColorResource(R.color.color_primary);
+        chip.setCloseIconVisible(true);
+        chip.setCheckable(false);
+        chip.setClickable(true);
+        chip.setTextColor(getResources().getColor(R.color.white));
+        chip.setChipIconResource(R.drawable.filter_icon);
+        chip.setChipIconTintResource(R.color.white);
+
+        ((ChipGroup) findViewById(R.id.chip_group)).addView(chip);
+        buscarDetalle();
+        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ChipGroup) findViewById(R.id.chip_group)).removeView(((Chip) view));
+                Filter.remove(((Chip) view).getText());
+                buscarDetalle();
+            }
+        });
+
+    }
+
     // <editor-fold defaultstate="collapsed" desc="Colocar Color">
     private void configurarEstado(TextView textView , int idEstado , LinearLayout linearLayout) {
         int colorRes;
@@ -270,17 +366,9 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
     // </editor-fold>
 
     private void buscarDetalle(){
-        hojaRutaDetalleModelArrayList = new ArrayList<>();
-        hojaRutaDetalleAdapter = new HojaRutaDetalleAdapter(hojaRutaDetalleModelArrayList, this, this);
-        hojaDeRutaController = new HojaDeRutaController(this
-                , ((RecyclerView) findViewById(R.id.grdDatos))
-                , ((LinearLayout) findViewById(R.id.emptyView))
-                , hojaRutaDetalleAdapter
-                , ((SwipeRefreshLayout) findViewById(R.id.swipeRefresh))
-        );
 
-        hojaDeRutaController.buscarDetalle(idHojaRuta,idEstado);
-        ((TextView) findViewById(R.id.lblFechaActualizacion)).setText(util.getFechaHoraActual());
+        hojaDeRutaController.buscarDetalle(idHojaRuta,idEstado,Filter);
+        //((TextView) findViewById(R.id.lblFechaActualizacion)).setText(util.getFechaHoraActual());
     }
 
     @Override
@@ -335,6 +423,8 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
         }
     }
 
+    //Rechazo Logistico = 1
+    //Aceptacion Logistico = 0
     private void trasladoLogistico(int idHojaDeRuta, int idTraslado, int idTrasladoLogistica, int rechazo){
         if (!hojaDeRutaController.existsHojaNoRecolectado(idHojaRuta)){
         intent = new Intent().setClass(this, MactyTrasladoLogistico.class);
@@ -349,6 +439,7 @@ public class MactyHojaRutaDetalle extends AppCompatActivity implements HojaRutaD
         }
     }
 
+    //Inicio de recoleccion paquete
     private void recolectarTraslado(int idHojaDeRuta, int idTraslado, int idTrasladoLogistica){
        // if ( !hojaDeRutaController.existsHojaEnRuta() ) {
         intent = new Intent().setClass(this, MactyRecoleccionTraslado.class);

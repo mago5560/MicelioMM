@@ -11,7 +11,9 @@
      android:layout_height="match_parent"
      android:orientation="vertical">
 
-     <include layout="@layout/item_filtro_hoja_ruta"/>
+     <include layout="@layout/item_nav_bar_filter"/>
+     <include layout="@layout/item_filtro_hoja_ruta" android:visibility="gone"/>
+
      <include layout="@layout/item_recycler_view"/>
 
 

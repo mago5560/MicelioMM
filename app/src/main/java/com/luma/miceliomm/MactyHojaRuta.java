@@ -114,6 +114,7 @@ public class MactyHojaRuta extends AppCompatActivity implements HojaRutaResumenA
 
     }
 
+    private ArrayList<String> Filter;
     private void buscar(){
         hojaRutaResumenModelArrayList = new ArrayList<>();
         hojaRutaResumenAdapter = new HojaRutaResumenAdapter(hojaRutaResumenModelArrayList, this, this);
@@ -123,10 +124,17 @@ public class MactyHojaRuta extends AppCompatActivity implements HojaRutaResumenA
                 , hojaRutaResumenAdapter
                 , ((SwipeRefreshLayout) findViewById(R.id.swipeRefresh))
         );
+        Filter = new ArrayList<>();
+
+        hojaDeRutaController.setControllerGrd(  ((TextView) findViewById(R.id.lblFechaActualizacion))
+                , ((TextView) findViewById(R.id.lblTotalRegistros)) );
 
         hojaDeRutaController.buscar(util.formatDateDB ( ((TextView) findViewById(R.id.lblFechaInicialBusqueda)).getText().toString() )
-                ,util.formatDateDB ( ((TextView) findViewById(R.id.lblFechaFinalBusqueda)).getText().toString() ));
-        ((TextView) findViewById(R.id.lblFechaActualizacion)).setText(util.getFechaHoraActual());
+                ,util.formatDateDB ( ((TextView) findViewById(R.id.lblFechaFinalBusqueda)).getText().toString() )
+                ,""
+                , this.Filter);
+
+        //((TextView) findViewById(R.id.lblFechaActualizacion)).setText(util.getFechaHoraActual());
     }
 
     @Override

@@ -147,8 +147,8 @@ public class LocationService extends Service implements
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         // Hacer lo que necesites con la ubicación...
-        cls.latitud = String.valueOf( latitude);
-        cls.longitud = String.valueOf(longitude);
+        cls.latitud =   latitude;
+        cls.longitud =  longitude;
         cls.idVehiculo = extras.getIdVehiculo();
         cls.idPersonal = extras.getIdPiloto();
         controller.insertarLogUbicacion(cls);

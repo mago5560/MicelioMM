@@ -9,7 +9,7 @@
     android:orientation="vertical"
     tools:context=".MactyHojaRutaDetalle">
 
-    <include layout="@layout/item_nav_bar_back"/>
+    <include layout="@layout/item_nav_bar_back_filter"/>
 
     <include layout="@layout/item_hoja_ruta_resumen"/>
 

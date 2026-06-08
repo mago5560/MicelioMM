@@ -64,6 +64,14 @@ public class HojaDeRutaController {
 
     private ServicesExtrasCustoms extras = ServicesExtrasCustoms.getInstance();
 
+    private TextView lblFechaUltimaBusqueda, lblTotalRegistros;
+
+    //Controles de Filtro
+    private String FechaInicio, FechaFinal, SectorLogistico;
+
+    private String IdHojaRuta,   IdEstado;
+    private ArrayList<String> Filter;
+
     public HojaDeRutaController(Context context) {
         this.context = context;
         this.util = new FunctionCustoms();
@@ -100,6 +108,11 @@ public class HojaDeRutaController {
         this.dao = new HojaRutaDao(db);
         this.resumenDao = new HojaRutaResumenDao(db);
         this.detalleDao = new HojaRutaDetalleDao(db);
+    }
+
+    public void setControllerGrd(TextView lblFechaUltimaBusqueda, TextView lblTotalRegistros) {
+        this.lblFechaUltimaBusqueda = lblFechaUltimaBusqueda;
+        this.lblTotalRegistros = lblTotalRegistros;
     }
 
     // <editor-fold defaultstate="collapsed" desc="descarga datos">
@@ -148,10 +161,17 @@ public class HojaDeRutaController {
 
     // <editor-fold defaultstate="collapsed" desc="Buscar Resumen Local">
     private  AsyncBuscar asyncBuscar;
-    public void buscar(String FechaInicio, String FechaFinal) {
+
+
+    public void buscar(String FechaInicio, String FechaFinal, String SectorLogistico, ArrayList<String> Filter) {
+        this.FechaInicio = FechaInicio;
+        this.FechaFinal = FechaFinal;
+        this.SectorLogistico = SectorLogistico;
+        this.Filter = Filter;
+
         recyclerView.setScrollingTouchSlop(0);
         asyncBuscar = new AsyncBuscar();
-        asyncBuscar.execute(FechaInicio,FechaFinal);
+        asyncBuscar.execute( );
     }
 
     private class AsyncBuscar extends AsyncTask<String, Void, ArrayList> {
@@ -159,7 +179,7 @@ public class HojaDeRutaController {
 
         @Override
         protected ArrayList doInBackground(String... strings) {
-            return resumenDao.selectResumen(strings[0],strings[1]);
+            return resumenDao.selectResumen(FechaInicio,FechaFinal,SectorLogistico,Filter );
         }
 
         @Override
@@ -189,6 +209,8 @@ public class HojaDeRutaController {
             recyclerView.setVisibility(View.VISIBLE);
             recyclerViewEmpty.setVisibility(View.GONE);
         }
+        lblFechaUltimaBusqueda.setText(util.getFechaHoraActual());
+        lblTotalRegistros.setText(String.valueOf(arrayList.size()));
     }
 // </editor-fold>
 
@@ -275,10 +297,14 @@ public class HojaDeRutaController {
 
     // <editor-fold defaultstate="collapsed" desc="Buscar Detalle Local">
     private  AsyncBuscarDetalle asyncBuscarDetalle;
-    public void buscarDetalle(int idHojaRuta , String idEstado) {
+    public void buscarDetalle(int idHojaRuta , String idEstado, ArrayList<String> Filter) {
+        this.Filter = Filter;
+        this.IdHojaRuta = String.valueOf(idHojaRuta);
+        this.IdEstado = idEstado;
+
         recyclerView.setScrollingTouchSlop(0);
         asyncBuscarDetalle = new AsyncBuscarDetalle();
-        asyncBuscarDetalle.execute(String.valueOf(idHojaRuta), idEstado);
+        asyncBuscarDetalle.execute();
     }
 
     private class AsyncBuscarDetalle extends AsyncTask<String, Void, ArrayList> {
@@ -286,7 +312,7 @@ public class HojaDeRutaController {
 
         @Override
         protected ArrayList doInBackground(String... strings) {
-            return detalleDao.selectDetalle(strings[0],strings[1]);
+            return detalleDao.selectDetalle(IdHojaRuta,IdEstado,Filter);
         }
 
         @Override
@@ -316,6 +342,8 @@ public class HojaDeRutaController {
             recyclerView.setVisibility(View.VISIBLE);
             recyclerViewEmpty.setVisibility(View.GONE);
         }
+        lblFechaUltimaBusqueda.setText(util.getFechaHoraActual());
+        lblTotalRegistros.setText(String.valueOf(arrayList.size()));
     }
     // </editor-fold>
 

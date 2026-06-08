@@ -92,36 +92,93 @@ public class HojaRutaDetalleDao {
 
     }
 
-    public ArrayList<HojaRutaDetalleModel> selectDetalle(String IdHojaDeRuta, String IdEstado){
+    public ArrayList<HojaRutaDetalleModel> selectDetalle(String IdHojaDeRuta, String IdEstado, ArrayList<String> Filter){
         ArrayList<HojaRutaDetalleModel> arrayList = new ArrayList<>();
-        // INNER JOIN entre Paquetes y Rutas
-        String sql = "SELECT a.idHojaDeRuta,a.hojaDeRutaEstado, a.idTraslado,a.idTrasladoLogistica, " +
+        ArrayList<String> args = new ArrayList<>();
 
-                " a.observaciones,  a.referencia, " +
-                "   a.nombreHorarioTraslado, a.horarioEntregaTraslado, a.direccionEntregaTraslado, " +
-                " a.nombreDepartamentoTraslado, a.nombreMunicipioTraslado, a.zonaTraslado, a.entregarATraslado, " +
-                " a.recibidoPorTraslado, a.latitudEntregaTraslado, a.longitudEntregaTraslado, a.observacionesEntregaTraslado,"+
+        StringBuilder sql = new StringBuilder();
 
-                "   a.idEstado, d.nombre as estadoNombre," +
-                "  SUM(a.bultos) as totalBultos " +
-                " ,a.nombreUbicacionOrigen , a.nombreUbicacionDestino ,  a.nombreTipoMovimiento " +
-                " , a.telefonoUbicacionDestino "+
-                " FROM TblHojaRuta a " +
-                " LEFT JOIN TblPiloto c ON a.idPiloto = c.IdPersonal " +
-                " LEFT JOIN TblEstados d ON a.idEstado = d.idEstado " +
-                " WHERE a.idHojaDeRuta = ? " +
-                " AND a.idEstado IN ( " + IdEstado + " ) " +
-                " GROUP BY a.idHojaDeRuta,a.hojaDeRutaEstado, a.idTraslado,a.idTrasladoLogistica, " +
-                " a.observaciones,  a.referencia, " +
-                "   a.nombreHorarioTraslado, a.horarioEntregaTraslado, a.direccionEntregaTraslado, " +
-                " a.nombreDepartamentoTraslado, a.nombreMunicipioTraslado, a.zonaTraslado, a.entregarATraslado, " +
-                " a.recibidoPorTraslado, a.latitudEntregaTraslado, a.longitudEntregaTraslado, a.observacionesEntregaTraslado,"+
-                "                   a.idEstado, d.nombre "+
-                " ,a.nombreUbicacionOrigen , a.nombreUbicacionDestino ,  a.nombreTipoMovimiento " +
-                " , a.telefonoUbicacionDestino "
-                ;
+        sql.append("SELECT a.idHojaDeRuta,a.hojaDeRutaEstado, ")
+                .append(" a.idTraslado,a.idTrasladoLogistica, ")
+                .append(" a.observaciones, a.referencia, ")
+                .append(" a.nombreHorarioTraslado, ")
+                .append(" a.horarioEntregaTraslado, ")
+                .append(" a.direccionEntregaTraslado, ")
+                .append(" a.nombreDepartamentoTraslado, ")
+                .append(" a.nombreMunicipioTraslado, ")
+                .append(" a.zonaTraslado, ")
+                .append(" a.entregarATraslado, ")
+                .append(" a.recibidoPorTraslado, ")
+                .append(" a.latitudEntregaTraslado, ")
+                .append(" a.longitudEntregaTraslado, ")
+                .append(" a.observacionesEntregaTraslado, ")
+                .append(" a.idEstado, ")
+                .append(" d.nombre as estadoNombre, ")
+                .append(" SUM(a.bultos) as totalBultos, ")
+                .append(" a.nombreUbicacionOrigen, ")
+                .append(" a.nombreUbicacionDestino, ")
+                .append(" a.nombreTipoMovimiento, ")
+                .append(" a.telefonoUbicacionDestino ")
+                .append(" FROM TblHojaRuta a ")
+                .append(" LEFT JOIN TblPiloto c ON a.idPiloto = c.IdPersonal ")
+                .append(" LEFT JOIN TblEstados d ON a.idEstado = d.idEstado ")
+                .append(" WHERE a.idHojaDeRuta = ? ")
+                .append(" AND a.idEstado IN (" + IdEstado + ") ");
 
-        Cursor cursor = db.rawQuery(sql, new String[]{IdHojaDeRuta});
+        args.add(IdHojaDeRuta);
+
+        // Filtro por chips (opcional)
+        if (Filter != null && !Filter.isEmpty()) {
+
+            for (String parametro : Filter) {
+
+                sql.append(" AND (")
+                        .append(" a.idTraslado || ")
+                        .append(" a.idTrasladoLogistica || ")
+                        .append(" a.referencia || ")
+                        .append(" a.observaciones || ")
+                        .append(" a.nombreHorarioTraslado || ")
+                        .append(" a.direccionEntregaTraslado || ")
+                        .append(" a.nombreDepartamentoTraslado || ")
+                        .append(" a.nombreMunicipioTraslado || ")
+                        .append(" a.zonaTraslado || ")
+                        .append(" a.entregarATraslado || ")
+                        .append(" a.recibidoPorTraslado || ")
+                        .append(" a.nombreUbicacionOrigen || ")
+                        .append(" a.nombreUbicacionDestino || ")
+                        .append(" a.nombreTipoMovimiento || ")
+                        .append(" a.telefonoUbicacionDestino ")
+                        .append(" LIKE ? )");
+
+                args.add("%" + parametro + "%");
+            }
+        }
+
+        sql.append(" GROUP BY ")
+                .append(" a.idHojaDeRuta,a.hojaDeRutaEstado, ")
+                .append(" a.idTraslado,a.idTrasladoLogistica, ")
+                .append(" a.observaciones,a.referencia, ")
+                .append(" a.nombreHorarioTraslado, ")
+                .append(" a.horarioEntregaTraslado, ")
+                .append(" a.direccionEntregaTraslado, ")
+                .append(" a.nombreDepartamentoTraslado, ")
+                .append(" a.nombreMunicipioTraslado, ")
+                .append(" a.zonaTraslado, ")
+                .append(" a.entregarATraslado, ")
+                .append(" a.recibidoPorTraslado, ")
+                .append(" a.latitudEntregaTraslado, ")
+                .append(" a.longitudEntregaTraslado, ")
+                .append(" a.observacionesEntregaTraslado, ")
+                .append(" a.idEstado,d.nombre, ")
+                .append(" a.nombreUbicacionOrigen, ")
+                .append(" a.nombreUbicacionDestino, ")
+                .append(" a.nombreTipoMovimiento, ")
+                .append(" a.telefonoUbicacionDestino ");
+
+        Cursor cursor = db.rawQuery(
+                sql.toString(),
+                args.toArray(new String[0])
+        );
         //cursor.moveToFirst();
         while (cursor.moveToNext()) {
             HojaRutaDetalleModel v = new HojaRutaDetalleModel();

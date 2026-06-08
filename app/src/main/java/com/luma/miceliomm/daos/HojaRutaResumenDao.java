@@ -88,7 +88,121 @@ public class HojaRutaResumenDao {
 
     }
 
-    public HojaRutaResumenModel selectResumenIdHojaDeRuta(int idHojaDeRuta ){
+    public ArrayList<HojaRutaResumenModel>  selectResumen (String FechaInicial,
+                                String FechaFinal,
+                                String SectorLogistico,
+                                ArrayList<String> Filter) {
+
+        ArrayList<HojaRutaResumenModel> arrayList = new ArrayList<>();
+        StringBuilder sql = new StringBuilder();
+
+        sql.append("SELECT a.idHojaDeRuta, a.hojaDeRutaEstado, ")
+                .append(" c.nombre AS hojaDeRutaNombreEstado, ")
+                .append(" a.idSectorLogistico, ")
+                .append(" b.nombre AS nombreSectorLogistico, ")
+                .append(" a.idPiloto, a.nombrePiloto, ")
+                .append(" a.idVehiculo, a.fecha, ")
+                .append(" SUM(a.bultos) as totalBultos, ")
+                .append(" a.hojaDeRutaVale, ")
+                .append(" a.hojaDeRutaOtrosGastos, ")
+                .append(" a.hojaDeRutaFechaHoraSalida, ")
+                .append(" a.hojaDeRutaKmInicial, ")
+                .append(" a.hojaDeRutaGalones, ")
+                .append(" a.hojaDeRutaKmFinal, ")
+                .append(" a.hojaDeRutaFechaHoraRegreso, ")
+                .append(" a.hojaDeRutaLatitudInicial, ")
+                .append(" a.hojaDeRutaLongitudInicial, ")
+                .append(" a.hojaDeRutaLatitudFinal, ")
+                .append(" a.hojaDeRutaLongitudFinal ")
+                .append(" FROM TblHojaRuta a ")
+                .append(" LEFT JOIN TblSector b ON a.idSectorLogistico = b.idSectorLogistico ")
+                .append(" LEFT JOIN TblEstados c ON a.hojaDeRutaEstado = c.idEstado ")
+                .append(" WHERE a.fecha BETWEEN ? AND ? ");
+
+        ArrayList<String> args = new ArrayList<>();
+        args.add(FechaInicial);
+        args.add(FechaFinal);
+
+        // Filtro opcional por sector logístico
+        if (SectorLogistico != null && !SectorLogistico.trim().isEmpty()) {
+            sql.append(" AND a.idSectorLogistico = ? ");
+            args.add(SectorLogistico);
+        }
+
+        if (Filter != null && !Filter.isEmpty()) {
+
+            for (String parametro : Filter) {
+
+                sql.append(" AND (")
+                        .append(" a.nombrePiloto || ")
+                        .append(" c.nombre || ")
+                        .append(" b.nombre || ")
+                        .append(" a.idVehiculo ")
+                        .append(" LIKE ? ) ");
+
+                args.add("%" + parametro + "%");
+            }
+        }
+
+        sql.append(" GROUP BY a.idHojaDeRuta, a.hojaDeRutaEstado, c.nombre, ")
+                .append(" a.idSectorLogistico, b.nombre, ")
+                .append(" a.idPiloto, a.nombrePiloto, ")
+                .append(" a.idVehiculo, a.fecha, ")
+                .append(" a.hojaDeRutaVale, ")
+                .append(" a.hojaDeRutaOtrosGastos, ")
+                .append(" a.hojaDeRutaFechaHoraSalida, ")
+                .append(" a.hojaDeRutaKmInicial, ")
+                .append(" a.hojaDeRutaGalones, ")
+                .append(" a.hojaDeRutaKmFinal, ")
+                .append(" a.hojaDeRutaFechaHoraRegreso, ")
+                .append(" a.hojaDeRutaLatitudInicial, ")
+                .append(" a.hojaDeRutaLongitudInicial, ")
+                .append(" a.hojaDeRutaLatitudFinal, ")
+                .append(" a.hojaDeRutaLongitudFinal ")
+                .append(" ORDER BY a.hojaDeRutaEstado ASC, a.idHojaDeRuta ASC");
+
+
+        Cursor cursor =  db.rawQuery(sql.toString(), args.toArray(new String[0]));
+        //cursor.moveToFirst();
+        while (cursor.moveToNext()) {
+            HojaRutaResumenModel v = new HojaRutaResumenModel();
+            ActualizaHojaDeRutaModel cls = new ActualizaHojaDeRutaModel();
+
+            v.idHoraRuta = cursor.getInt(cursor.getColumnIndexOrThrow("idHojaDeRuta"));
+
+            v.hojaDeRutaEstado = cursor.getInt(cursor.getColumnIndexOrThrow("hojaDeRutaEstado"));
+            v.hojaRutaNombreEstado = cursor.getString(cursor.getColumnIndexOrThrow("hojaDeRutaNombreEstado"));
+
+            v.idSectorLogistico = cursor.getInt(cursor.getColumnIndexOrThrow("idSectorLogistico"));
+            v.nombreSectorLogistico = cursor.getString(cursor.getColumnIndexOrThrow("nombreSectorLogistico"));
+            v.idPiloto = cursor.getInt(cursor.getColumnIndexOrThrow("idPiloto"));
+            v.nombrePiloto = cursor.getString(cursor.getColumnIndexOrThrow("nombrePiloto"));
+            v.idVehiculo = cursor.getInt(cursor.getColumnIndexOrThrow("idVehiculo"));
+            v.fecha = cursor.getString(cursor.getColumnIndexOrThrow("fecha"));
+            v.totalBultos = cursor.getInt(cursor.getColumnIndexOrThrow("totalBultos"));
+            // v.telefonoUbicacionDestino = cursor.getString(cursor.getColumnIndexOrThrow("telefonoUbicacionDestino"));
+
+            cls.vale  = cursor.getInt(cursor.getColumnIndexOrThrow("hojaDeRutaVale"));
+            cls.otrosGastos = cursor.getInt(cursor.getColumnIndexOrThrow("hojaDeRutaOtrosGastos"));
+            cls.fechaHoraSalida = cursor.getString(cursor.getColumnIndexOrThrow("hojaDeRutaFechaHoraSalida"));
+            cls.fechaHoraRegreso = cursor.getString(cursor.getColumnIndexOrThrow("hojaDeRutaFechaHoraRegreso"));
+            cls.kmInicial = cursor.getInt(cursor.getColumnIndexOrThrow("hojaDeRutaKmInicial"));
+            cls.kmFinal = cursor.getInt(cursor.getColumnIndexOrThrow("hojaDeRutaKmFinal"));
+            cls.galones = cursor.getInt(cursor.getColumnIndexOrThrow("hojaDeRutaGalones"));
+            cls.latitudInicial = cursor.getString(cursor.getColumnIndexOrThrow("hojaDeRutaLatitudInicial"));
+            cls.longitudInicial = cursor.getString(cursor.getColumnIndexOrThrow("hojaDeRutaLongitudInicial"));
+            cls.latitudFinal = cursor.getString(cursor.getColumnIndexOrThrow("hojaDeRutaLatitudFinal"));
+            cls.longitudFinal = cursor.getString(cursor.getColumnIndexOrThrow("hojaDeRutaLongitudFinal"));
+
+            v.actualizaHojaDeRutaModel = cls;
+            arrayList.add(v);
+        }
+
+        //cursor.close();
+        return arrayList;
+    }
+
+        public HojaRutaResumenModel selectResumenIdHojaDeRuta(int idHojaDeRuta ){
         HojaRutaResumenModel v = new HojaRutaResumenModel();
 
         String sql = "SELECT a.idHojaDeRuta, a.hojaDeRutaEstado, c.nombre hojaDeRutaNombreEstado , a.idSectorLogistico, b.nombre nombreSectorLogistico," +

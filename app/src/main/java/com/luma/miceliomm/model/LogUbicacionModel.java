@@ -6,10 +6,10 @@ import com.google.gson.annotations.SerializedName;
 public class LogUbicacionModel {
     @SerializedName("latitud")
     @Expose
-    public String latitud= "0";
+    public Double latitud= 0.00;
     @SerializedName("longitud")
     @Expose
-    public String longitud= "0";
+    public Double longitud= 0.00;
     @SerializedName("idPersonal")
     @Expose
     public int idPersonal= 0;

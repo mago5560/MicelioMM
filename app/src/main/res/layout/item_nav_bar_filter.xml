@@ -1,89 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_primary">
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_margin="5dp"
+            android:orientation="horizontal">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/lblTituloNavBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerInParent="true"
-                android:layout_margin="5dp"
-                android:orientation="horizontal">
+                android:layout_marginLeft="10dp"
+                android:text="TITULO"
+                android:textColor="@android:color/white"
+                android:textSize="20dp" />
 
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/lblTituloNavBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="TITULO"
-                    android:textColor="@android:color/black"
-                    android:textSize="20dp" />
-
-            </LinearLayout>
-
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_margin="5dp"
+            android:orientation="horizontal"
+            android:id="@+id/llyFiltro">
 
             <ImageView
-                android:id="@+id/imgvwAbrirBuscador"
+                android:id="@+id/imgvwAbrirFiltro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:layout_marginStart="@dimen/margin"
                 android:layout_marginTop="@dimen/margin"
                 android:layout_marginEnd="@dimen/margin"
                 android:layout_marginBottom="@dimen/margin"
-                android:visibility="visible"
-                app:srcCompat="@drawable/search_icon"
-                app:tint="@android:color/black" />
+                app:srcCompat="@drawable/filter_icon"
+                app:tint="@android:color/white" />
 
-
-        </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/llyFilter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <SearchView
-                android:id="@+id/txtBuscador"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="90"
-                android:background="@android:color/white"
-                android:iconifiedByDefault="false"
-                android:queryHint="Buscar..." />
-
-            <ImageView
-                android:id="@+id/imgvwCerrarBuscador"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:layout_margin="@dimen/margin"
-                app:srcCompat="@drawable/close_icon"
-                app:tint="@android:color/black" />
+                android:textStyle="bold"
+                android:text="Filtro"
+                android:textSize="20dp"
+                android:layout_gravity="center_vertical"
+                android:textColor="@android:color/white"/>
+
 
         </LinearLayout>
 
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:alpha="0.7"
-            android:background="@android:color/darker_gray"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+
+    </RelativeLayout>
 
 
-    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0.7"
+        android:background="@android:color/darker_gray"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"/>
+
+
+</LinearLayout>
