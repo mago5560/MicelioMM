@@ -11,8 +11,6 @@ public class HojaRutaDetalleModel {
     public String nombreEstado = "";
     public String referencia="";
     public String observaciones = "";
-
-
     public String nombreHorarioTraslado="";
     public Integer horarioEntregaTraslado;
     public String direccionEntregaTraslado="";
@@ -24,15 +22,14 @@ public class HojaRutaDetalleModel {
     public String latitudEntregaTraslado="";
     public String longitudEntregaTraslado="";
     public String observacionesEntregaTraslado="";
-
     public String imagenDeRecibidoTraslado ="";
     public String imagenDeEntregaTraslado="";
-
     public String nombreTipoMovimiento="";
     public String nombreUbicacionOrigen ="";
     public String  nombreUbicacionDestino ="";
 
     public String telefonoUbicacionDestino ="";
+    public  String idSociedad = "";
 
 
 }

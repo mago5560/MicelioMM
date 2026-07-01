@@ -99,7 +99,9 @@ public interface ApiService {
                                                           @Part("IdMotivoDeRechazo") RequestBody IdMotivoDeRechazo ,
                                                           @Part MultipartBody.Part archivoImagen,
                                                           @Part("ImagenDeEntregado") RequestBody ImagenDeEntregado ,
-                                                          @Part("FechaDeEntrega") RequestBody FechaDeEntrega  );
+                                                          @Part("FechaDeEntrega") RequestBody FechaDeEntrega,
+                                                          @Part("IdTipoDocumento") RequestBody IdTipoDocumento,
+                                                          @Part("EscalaCD") RequestBody EscalaCD );
 
 
     @Multipart

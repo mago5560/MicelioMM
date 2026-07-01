@@ -1,6 +1,7 @@
 package com.luma.miceliomm;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,32 +13,42 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.activity.OnBackPressedCallback;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 
+import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+
+import com.luma.miceliomm.adapter.MotivoMaestroAdapter;
+import com.luma.miceliomm.controller.MotivoController;
 import com.luma.miceliomm.controller.TrasladoLogisticaController;
 import com.luma.miceliomm.customs.FunctionCustoms;
 import com.luma.miceliomm.model.HojaRutaDetalleModel;
-import com.luma.miceliomm.model.TrasladoLogisticaModel;
+import com.luma.miceliomm.model.MotivoModel;
+
 import com.luma.miceliomm.model.TrasladoLogisticoRecoleccionModel;
 
-import org.w3c.dom.Text;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -45,11 +56,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import java.util.ArrayList;
+
 import java.util.List;
 
-public class MactyRecoleccionTraslado extends AppCompatActivity {
+import android.widget.CompoundButton;
+import android.widget.ToggleButton;
+
+public class MactyRecoleccionTraslado extends AppCompatActivity implements MotivoMaestroAdapter.OnItemClickListener{
 
     private Intent intent;
     private FunctionCustoms util;
@@ -59,7 +74,7 @@ public class MactyRecoleccionTraslado extends AppCompatActivity {
     private static final int REQUEST_PICK_IMAGE = 2;
 
     // Datos recibidos
-    private int idHojaDeRuta, idTraslado, idTrasladoLogistico;
+    private int idHojaDeRuta, idTraslado, idTrasladoLogistico, escalaCD=0;
 
     private TrasladoLogisticaController trasladoLogisticaController;
     private TrasladoLogisticoRecoleccionModel trasladoLogisticoRecoleccionModel;
@@ -121,7 +136,12 @@ public class MactyRecoleccionTraslado extends AppCompatActivity {
         ((Button) findViewById(R.id.btnGrabar)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                grabar();
+                if(escalaCD == 1){
+                        mensajeEscalaCD().show();
+                }else{
+                    grabar();
+                }
+
             }
         });
 
@@ -154,6 +174,24 @@ public class MactyRecoleccionTraslado extends AppCompatActivity {
             }
         });
 
+        ((Button) findViewById(R.id.btnNoRecolectar)).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                dialogNoRecoleccion();
+            }
+        });
+
+        ((ToggleButton) findViewById(R.id.toggleEscalaCD)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(@NonNull CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked){
+                    escalaCD = 1;
+                }else{
+                    escalaCD = 0;}
+            }
+        });
     }
 
     private void getParametros(){
@@ -200,11 +238,40 @@ public class MactyRecoleccionTraslado extends AppCompatActivity {
     private void grabar(){
         if (validarCampos()){
             trasladoLogisticoRecoleccionModel.observaciones = ((EditText) findViewById(R.id.txtObservaciones)).getText().toString();
+            trasladoLogisticoRecoleccionModel.escalaCD = this.escalaCD;
+            trasladoLogisticoRecoleccionModel.tipoDocumento = ((EditText) findViewById(R.id.txtTipoDocumentoRecepcion)).getText().toString();
             trasladoLogisticoRecoleccionModel.idEstado = 4;
             trasladoLogisticoRecoleccionModel.fechaHoraRecoleccion = util.getFechaHoraActual();
             trasladoLogisticaController.setRecoleccionTrasladoLogistico(trasladoLogisticoRecoleccionModel);
 
         }
+    }
+
+    public android.app.AlertDialog mensajeEscalaCD() {
+        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        android.app.AlertDialog alerta;
+        builder.setCancelable(false);
+
+        builder.setTitle("Mensaje del Sistema");
+        builder.setMessage("Selecciono operacion con Escala en C.D. esta seguro?");
+
+        builder.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                grabar();
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alerta = builder.create();
+        return alerta;
     }
 
     private boolean validarCampos(){
@@ -304,6 +371,8 @@ public class MactyRecoleccionTraslado extends AppCompatActivity {
         if (!trasladoLogisticoRecoleccionModel.rutaImagen.isEmpty()) {
             Bitmap bMap = BitmapFactory.decodeFile(trasladoLogisticoRecoleccionModel.rutaImagen);
             ((ImageView) findViewById(R.id.ivArchivoImagen)).setImageBitmap(bMap);
+            ((ImageView) findViewById(R.id.ivArchivoImagen)).setVisibility(View.VISIBLE);
+            ((ImageView) findViewById(R.id.ivNoArchivoImagen)).setVisibility(View.GONE);
             //((ImageView) findViewById(R.id.ivArchivoImagen)) .setImageURI(Uri.parse(model.rutaImagen));
         }
     }
@@ -333,6 +402,8 @@ public class MactyRecoleccionTraslado extends AppCompatActivity {
                 Uri selectedImage = data.getData();
                 comprimirImagen(selectedImage);
                 ((ImageView) findViewById(R.id.ivArchivoImagen)).setImageURI(selectedImage);
+                ((ImageView) findViewById(R.id.ivArchivoImagen)).setVisibility(View.VISIBLE);
+                ((ImageView) findViewById(R.id.ivNoArchivoImagen)).setVisibility(View.GONE);
                 //trasladoLogisticaModel.rutaImagen = selectedImage.toString();
             }
         }
@@ -497,6 +568,185 @@ public class MactyRecoleccionTraslado extends AppCompatActivity {
         Uri uri = Uri.parse("geo:" + Destino + "?z=16&q=" + Destino + "(" + Referencia + ")");
         startActivity(new Intent(Intent.ACTION_VIEW, uri));
     }
+    // </editor-fold>
+
+
+
+    // <editor-fold defaultstate="collapsed" desc="Dialog No Recoleccion">
+    private  View viewDialogLayoutRechazo;
+    private AlertDialog alertDialogNoRecoleccion;
+    private void dialogNoRecoleccion( ) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        final LayoutInflater inflater = getLayoutInflater();
+        viewDialogLayoutRechazo = inflater.inflate(R.layout.content_view_no_recoleccion, null);
+        this.dialogNoRecoleccionFindById( );
+        this.dialogNoRecoleccionActions( );
+        builder.setView(viewDialogLayoutRechazo );
+
+        alertDialogNoRecoleccion = builder.show();
+    }
+
+
+    private void dialogNoRecoleccionFindById( ){
+
+
+
+    }
+    private void dialogNoRecoleccionActions( ){
+        ((Button) viewDialogLayoutRechazo.findViewById(R.id.btnCancelarNoRecoleccion)).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                alertDialogNoRecoleccion.dismiss();
+            }
+        });
+
+        ((Button) viewDialogLayoutRechazo.findViewById(R.id.btnAceptarNoRecoleccion)).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                trasladoLogisticoRecoleccionModel.idEstado = 7;
+                trasladoLogisticoRecoleccionModel.fechaHoraRecoleccion = util.getFechaHoraActual();
+                trasladoLogisticaController.setRecoleccionTrasladoLogisticoEstado(trasladoLogisticoRecoleccionModel);
+            }
+        });
+
+        ((EditText) viewDialogLayoutRechazo.findViewById(R.id.txtMotivoRechazo)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogMotivo();
+            }
+        });
+    }
+    // </editor-fold>
+
+
+
+    // <editor-fold defaultstate="collapsed" desc="Maestro Motivos">
+    private MotivoController motivoController;
+
+    private void descargarMotivo() {
+        motivoController = new MotivoController(this);
+        //motivoController.getDatos(  );
+    }
+
+    AlertDialog alertDialogMotivoMaestro;
+    MotivoMaestroAdapter motivoMaestroAdapter;
+    ArrayList<MotivoModel> motivoModelArrayList;
+
+    private void dialogMotivo() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+
+        final LayoutInflater inflater = getLayoutInflater();
+        final View dialogLayout = inflater.inflate(R.layout.content_datos_maestros, null);
+        dialogMotivoFindViewsByIds(dialogLayout);
+        dialogMotivoActions(dialogLayout);
+        buscarMotivo(dialogLayout);
+        builder.setTitle("Registros Existentes");
+
+        builder.setNegativeButton("Cerrar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        builder.setPositiveButton("Limpiar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ((EditText) viewDialogLayoutRechazo.findViewById(R.id.txtMotivoRechazo)).setText("");
+                trasladoLogisticoRecoleccionModel.motivoNoRecoleccion = "";
+                dialogInterface.dismiss();
+            }
+        });
+
+        builder.setView(dialogLayout);
+        alertDialogMotivoMaestro = builder.show();
+    }
+
+
+    private void dialogMotivoFindViewsByIds(View v) {
+        //RecyclerView
+        ((RecyclerView) v.findViewById(R.id.grdDatos)).setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        ((RecyclerView) v.findViewById(R.id.grdDatos)).setLayoutManager(llm);
+        ((TextView) v.findViewById(R.id.lblTituloNavBar)).setText("");
+    }
+
+    private void dialogMotivoActions(View v) {
+        ((ImageView) v.findViewById(R.id.imgvwAbrirBuscador)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View vv) {
+                visibleFilter(v, true);
+            }
+        });
+
+        ((ImageView) v.findViewById(R.id.imgvwCerrarBuscador)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View vv) {
+                visibleFilter(v, false);
+            }
+        });
+
+        ((SearchView) v.findViewById(R.id.txtBuscador)).setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                motivoMaestroAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
+
+        ((SwipeRefreshLayout) v.findViewById(R.id.swipeRefresh)).setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                buscarMotivo(v);
+            }
+        });
+    }
+
+    @Override
+    public void onClick(MotivoMaestroAdapter.ItemAdapterViewHolder holder, int position) {
+        ((EditText) viewDialogLayoutRechazo.findViewById(R.id.txtMotivoRechazo)).setText(motivoMaestroAdapter.info.get(position).Descripcion);
+        trasladoLogisticoRecoleccionModel.motivoNoRecoleccion = motivoMaestroAdapter.info.get(position).Descripcion;
+        trasladoLogisticoRecoleccionModel.idMotivoDeRechazoTraslado = String.valueOf(motivoMaestroAdapter.info.get(position).IdMotivoDeRechazo);
+        alertDialogMotivoMaestro.dismiss();
+    }
+
+    private void buscarMotivo(View v) {
+        motivoModelArrayList = new ArrayList<>();
+        motivoMaestroAdapter = new MotivoMaestroAdapter(motivoModelArrayList, this, this);
+        motivoController = new MotivoController(this
+                , ((RecyclerView) v.findViewById(R.id.grdDatos))
+                , motivoMaestroAdapter
+                , ((SwipeRefreshLayout) v.findViewById(R.id.swipeRefresh))
+                , ((LinearLayout) v.findViewById(R.id.emptyView))
+        );
+
+        motivoController.buscar();
+        ((TextView) v.findViewById(R.id.lblFechaActualizacion)).setText(util.getFechaHoraActual());
+    }
+
+    private void visibleFilter(View v, boolean visible) {
+        if (visible) {
+            ((LinearLayout) v.findViewById(R.id.llyFilter)).setVisibility(View.VISIBLE);
+            ((SearchView) v.findViewById(R.id.txtBuscador)).requestFocus();
+            ((ImageView) v.findViewById(R.id.imgvwAbrirBuscador)).setVisibility(View.GONE);
+        } else {
+            ((LinearLayout) v.findViewById(R.id.llyFilter)).setVisibility(View.GONE);
+            ((SearchView) v.findViewById(R.id.txtBuscador)).setQuery("", false);
+            ((ImageView) v.findViewById(R.id.imgvwAbrirBuscador)).setVisibility(View.VISIBLE);
+        }
+    }
+
+
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Menu, Opciones y regresar a principal">

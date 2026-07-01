@@ -113,6 +113,7 @@ public class HojaRutaDetalleDao {
                 .append(" a.longitudEntregaTraslado, ")
                 .append(" a.observacionesEntregaTraslado, ")
                 .append(" a.idEstado, ")
+                .append(" a.idSociedad, ")
                 .append(" d.nombre as estadoNombre, ")
                 .append(" SUM(a.bultos) as totalBultos, ")
                 .append(" a.nombreUbicacionOrigen, ")
@@ -136,6 +137,7 @@ public class HojaRutaDetalleDao {
                         .append(" a.idTraslado || ")
                         .append(" a.idTrasladoLogistica || ")
                         .append(" a.referencia || ")
+                        .append(" a.idSociedad || ")
                         .append(" a.observaciones || ")
                         .append(" a.nombreHorarioTraslado || ")
                         .append(" a.direccionEntregaTraslado || ")
@@ -170,6 +172,7 @@ public class HojaRutaDetalleDao {
                 .append(" a.longitudEntregaTraslado, ")
                 .append(" a.observacionesEntregaTraslado, ")
                 .append(" a.idEstado,d.nombre, ")
+                .append(" a.idSociedad, ")
                 .append(" a.nombreUbicacionOrigen, ")
                 .append(" a.nombreUbicacionDestino, ")
                 .append(" a.nombreTipoMovimiento, ")
@@ -190,6 +193,7 @@ public class HojaRutaDetalleDao {
 
             v.observaciones =cursor.getString(cursor.getColumnIndexOrThrow("observaciones"));
             v.referencia =cursor.getString(cursor.getColumnIndexOrThrow("referencia"));
+            v.idSociedad =cursor.getString(cursor.getColumnIndexOrThrow("idSociedad"));
             v.nombreHorarioTraslado =cursor.getString(cursor.getColumnIndexOrThrow("nombreHorarioTraslado"));
             v.horarioEntregaTraslado = cursor.getInt(cursor.getColumnIndexOrThrow("horarioEntregaTraslado"));
             v.direccionEntregaTraslado =cursor.getString(cursor.getColumnIndexOrThrow("direccionEntregaTraslado"));
@@ -387,6 +391,11 @@ public class HojaRutaDetalleDao {
         values.put("fechaRecoleccion",cls.fechaHoraRecoleccion);
         values.put("observacionRecoleccion", cls.observaciones);
         values.put("idEstado",cls.idEstado);
+        //TODO:Campos adicionales al proceso de recoleccion
+        values.put("idMotivoDeRechazoTraslado", cls.idMotivoDeRechazoTraslado);
+        values.put("tipoDocumento", cls.tipoDocumento);
+        values.put("escalaCD", cls.escalaCD);
+
         return db.update("TblHojaRuta",values,
                 "idHojaDeRuta= ? AND idTraslado = ? AND idTrasladoLogistica= ?",
                 new String[]{String.valueOf(cls.idHojaDeRuta),String.valueOf(cls.idTraslado),String.valueOf(cls.idTrasladoLogistico)});

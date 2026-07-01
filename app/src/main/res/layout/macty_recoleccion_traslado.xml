@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_grey_lig_dark"
+    android:orientation="vertical"
     tools:context=".MactyRecoleccionTraslado">
 
 
@@ -14,119 +16,347 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"/>
 
-    <ScrollView
+    <!-- Main Scrollable Content -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
         android:fillViewport="true"
-        android:layout_below="@id/back_activity">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="32dp"
+            android:paddingTop="12dp">
 
-
-
-
-            <include layout="@layout/item_traslado_detalle"/>
-
-
-            <!-- Campos transaccionales -->
-            <TextView
+            <!-- ──────────────────────────────────────────── -->
+            <!-- Detalle del Traslado (card contenedor)       -->
+            <!-- ──────────────────────────────────────────── -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Datos de Recoleccion"
-                android:textStyle="bold"
-                android:textAlignment="center"/>
-
-            <!-- Observaciones -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                app:hintEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/txtObservaciones"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Observaciones"
-                    android:inputType="textMultiLine"
-                    android:minLines="3"
-                    android:gravity="top" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <!-- Sección de Imagen -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Evidencia"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="16dp">
-
-                <ImageView
-                    android:id="@+id/ivArchivoImagen"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:background="@drawable/no_camara"
-                    android:scaleType="centerCrop"
-                    android:layout_marginEnd="16dp"
-                    android:contentDescription="Vista previa de imagen" />
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="?attr/colorOutlineVariant"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="?attr/colorSurface">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnTomarFoto"
+                    <!-- Header de la tarjeta -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Tomar Foto"
-                        android:layout_marginBottom="8dp" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSeleccionarImagen"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Seleccionar de Galería" />
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/truck_icon"
+                            app:tint="?attr/colorPrimary"
+                            android:contentDescription="Traslado" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Detalle del Traslado"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                            android:textColor="?attr/colorPrimary"
+                            android:layout_marginStart="8dp" />
+
+                    </LinearLayout>
+
+                    <!-- Detalle incluido desde item_traslado_detalle -->
+                    <include layout="@layout/item_traslado_detalle" />
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-
-            <!-- Botones de acción -->
-            <LinearLayout
+            <!-- ──────────────────────────────────────────── -->
+            <!-- Datos de Recolección                         -->
+            <!-- ──────────────────────────────────────────── -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="?attr/colorOutlineVariant"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="?attr/colorSurface">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnGrabar"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Recolectar"
-                    android:layout_marginStart="8dp"
-                    android:backgroundTint="@android:color/holo_green_light"/>
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-            </LinearLayout>
+                    <!-- Header -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/clipboard_text_icon"
+                            app:tint="?attr/colorPrimary"
+                            android:contentDescription="Recolección" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Datos de Recolección"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                            android:textColor="?attr/colorPrimary"
+                            android:layout_marginStart="8dp" />
+
+                    </LinearLayout>
+
+
+
+                    <ToggleButton
+                        android:id="@+id/toggleEscalaCD"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="Sin Escalas"
+                        android:textOn="Con Escala En C.D."
+                        android:textOff="Sin Escalas"
+                        android:visibility="gone"
+                        android:background="@drawable/selector_toggle_button"
+                        android:textColor="@color/selector_toggle_text"
+                        android:textSize="14sp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
+
+                        <EditText
+                            android:id="@+id/txtTipoDocumentoRecepcion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Tipo Documento Recoleccion"
+                            android:inputType="none"
+                            android:singleLine="true"
+                            android:background="?attr/colorSurfaceVariant"
+                            android:drawableRight="@drawable/access_down_icon"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Campo Observaciones -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        app:hintEnabled="true"
+                        app:startIconTint="?attr/colorOnSurfaceVariant">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/txtObservaciones"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Observaciones"
+                            android:inputType="textMultiLine"
+                            android:minLines="4"
+                            android:maxLines="6"
+                            android:gravity="top|start"
+                            android:padding="12dp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ──────────────────────────────────────────── -->
+            <!-- Evidencia Fotográfica                        -->
+            <!-- ──────────────────────────────────────────── -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="?attr/colorOutlineVariant"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="?attr/colorSurface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <!-- Header -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/camera_icon"
+                            app:tint="?attr/colorPrimary"
+                            android:contentDescription="Evidencia" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Evidencia Fotográfica"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                            android:textColor="?attr/colorPrimary"
+                            android:layout_marginStart="8dp" />
+
+                    </LinearLayout>
+
+                    <!-- Vista previa de imagen grande y centrada -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:weightSum="2">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="200dp"
+                        android:layout_weight="1"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="?attr/colorOutlineVariant"
+                        app:strokeWidth="1dp"
+                        app:cardBackgroundColor="?attr/colorSurfaceVariant">
+
+                        <ImageView
+                            android:id="@+id/ivNoArchivoImagen"
+                            android:layout_width="75dp"
+                            android:layout_height="75dp"
+                            android:layout_gravity="center_vertical|center_horizontal"
+                            android:background="@drawable/camera_off_icon"
+                            android:scaleType="centerCrop"
+                            android:alpha="0.7"
+                            android:contentDescription="Vista previa de imagen" />
+
+                            <ImageView
+                                android:id="@+id/ivArchivoImagen"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical|center_horizontal"
+                                android:background="@drawable/camera_off_icon"
+                                android:scaleType="centerCrop"
+                                android:contentDescription="Vista previa de imagen"
+                                android:visibility="gone"/>
+
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Botones de acción para imagen -->
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <!-- Tomar Foto -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnTomarFoto"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="6dp"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            app:icon="@drawable/camera_icon"
+                            app:iconGravity="start"
+                            app:iconPadding="6dp"
+                            android:text="Tomar Foto" />
+
+                        <!-- Seleccionar de Galería -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSeleccionarImagen"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="6dp"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            app:icon="@drawable/image_multiple_icon"
+                            app:iconGravity="start"
+                            app:iconPadding="6dp"
+                            android:text="Galería" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnNoRecolectar"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                style="@style/Widget.Material3.Button"
+                app:iconGravity="start"
+                app:iconPadding="8dp"
+                app:cornerRadius="16dp"
+                android:textSize="16sp"
+                android:letterSpacing="0.02"
+                android:text="No Recolección"
+                app:backgroundTint="@android:color/holo_red_light"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGrabar"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                style="@style/Widget.Material3.Button"
+                app:iconGravity="start"
+                app:iconPadding="8dp"
+                app:cornerRadius="16dp"
+                android:textSize="16sp"
+                android:letterSpacing="0.02"
+                android:text="Recolección"
+                app:backgroundTint="@android:color/holo_green_light"
+                />
 
         </LinearLayout>
 
-    </ScrollView>
-</RelativeLayout>
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

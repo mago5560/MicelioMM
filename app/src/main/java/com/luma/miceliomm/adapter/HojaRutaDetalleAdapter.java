@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,7 +32,6 @@ public class HojaRutaDetalleAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public interface OnItemClickListener {
         public void onClick(ItemAdapterViewHolder holder, int position);
         public void onClickTrasladoLogistico(ItemAdapterViewHolder holder, int position);
-
         public void onClickAgregarImagenPaquete(ItemAdapterViewHolder holder, int position);
         public void onClickIniciarPaquete(ItemAdapterViewHolder holder, int position);
         public void onClickRechazoTrasladoLogistico(ItemAdapterViewHolder holder,int position);
@@ -95,9 +95,13 @@ public class HojaRutaDetalleAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 }
             }
 
+
+            holderItem.lblCVIdSociedad.setText(cls.idSociedad);
+            holderItem.lblCVFactura.setText(cls.referencia);
+
             //ConfiguracionDeColor
             configurarEstado(holderItem.lblCVnombreEstado,cls.idEstado, holderItem.llyCVColores);
-
+            configurarEmpresa(holderItem.lblCVIdSociedad,cls.idSociedad, holderItem.llyCVEmpresa, holderItem.imgvwCVLogo);
         } else if (holder instanceof FooterViewHolder) {
             FooterViewHolder footerHolder = (FooterViewHolder) holder;
             footerHolder.footerText.setText("No se encontraron mas registros...");
@@ -156,6 +160,38 @@ public class HojaRutaDetalleAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         linearLayout.setBackgroundColor(ContextCompat.getColor(context,colorRes));
     }
 
+
+    private void configurarEmpresa(TextView textView , String idSociedad , LinearLayout linearLayout , ImageView imageView ) {
+        int colorRes;
+        int colorText;
+
+        switch (idSociedad.toUpperCase()) {
+            case "MM":
+                colorRes = R.color.color_sociedad_mm;
+                colorText =R.color.white;
+                break;
+            case "NL":
+                colorRes = R.color.color_sociedad_nl;
+                colorText =R.color.black;
+                break;
+            case "CLV":
+                colorRes = R.color.color_sociedad_clv;
+                colorText =R.color.black;
+                break;
+            case "COM":
+                colorRes = R.color.color_sociedad_com;
+                colorText =R.color.black;
+                break;
+            default:
+                colorRes = R.color.color_accent;
+                colorText =R.color.white;
+                break;
+        }
+        imageView.setBackgroundColor(ContextCompat.getColor(context, colorRes));
+        textView.setTextColor( ContextCompat.getColor(context, colorText));
+        linearLayout.setBackgroundColor(ContextCompat.getColor(context,colorRes));
+    }
+
     //Si se utiliza esta fucion tomar en cuenta que se agrega size +1 por el footer.
     @Override
     public int getItemCount() {
@@ -177,9 +213,11 @@ public class HojaRutaDetalleAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         private TextView lblCVIdTrasladoLogistica,lblCVobservaciones, lblCVReferencia,lblCVDireccionEntregaTraslado,lblCVTotalBultos,lblCVnombreEstado;
         private TextView lblIrARechazarTraslado,lblIrAEntregarTraslado,lblAgregarImagen,lblIniciarPaquete;
         private TextView lblCVtelefonoUbicacionDestino,lblCVnombreUbicacionOrigen,lblCVnombreUbicacionDestino,lblCVnombreTipoMovimiento;
+        private TextView lblCVIdSociedad,lblCVFactura;
         private LinearLayout llyCVColores,llyTrasladoLogistico;
+        private LinearLayout llyCVEmpresa;
         private CardView cv;
-
+        private ImageView imgvwCVLogo;
 
         public ItemAdapterViewHolder(View itemView) {
             super(itemView);
@@ -202,6 +240,12 @@ public class HojaRutaDetalleAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             lblCVnombreUbicacionDestino = itemView.findViewById(R.id.lblCVnombreUbicacionDestino);
             lblCVnombreTipoMovimiento = itemView.findViewById(R.id.lblCVnombreTipoMovimiento);
             lblCVtelefonoUbicacionDestino = itemView.findViewById(R.id.lblCVtelefonoUbicacionDestino);
+
+
+            lblCVIdSociedad = itemView.findViewById(R.id.lblCVidSociedad);
+            lblCVFactura = itemView.findViewById(R.id.lblCVFactura);
+            llyCVEmpresa = itemView.findViewById(R.id.llyCvEmpresa);
+            imgvwCVLogo = itemView.findViewById(R.id.imgvwCVLogo);
 
 
             cv.setOnClickListener(this);

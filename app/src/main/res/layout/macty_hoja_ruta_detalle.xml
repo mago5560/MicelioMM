@@ -18,7 +18,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="40dp">
+        >
 
         <include layout="@layout/item_recycler_view"/>
 
@@ -26,8 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
+            android:padding="@dimen/margin"
             android:layout_alignParentBottom="true"
             android:gravity="center_horizontal|center_vertical">
 

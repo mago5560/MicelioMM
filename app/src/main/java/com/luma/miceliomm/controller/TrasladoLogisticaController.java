@@ -97,9 +97,12 @@ public class TrasladoLogisticaController {
         RequestBody ImagenDeEntregado = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(cls.imagenDeEntregadoTraslado));
         RequestBody FechaDeEntrega = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(cls.fechaDeEntregaTraslado));
 
+        RequestBody IdTipoDocumento = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(cls.idTipoDocumento));
+        RequestBody EscalaCD = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(cls.escalaCD));
+
 
         Call<ResponseBody> call = apiService.postActualizarTrasladoLogistica( IdTrasladoLogistica,IdTraslado,RecibidoPor,LatitudEntrega,LongitudEntrega,
-                ObservacionesEntrega,IdMotivoDeRechazo, multipartarchivoImagen,ImagenDeEntregado,FechaDeEntrega);
+                ObservacionesEntrega,IdMotivoDeRechazo, multipartarchivoImagen,ImagenDeEntregado,FechaDeEntrega, IdTipoDocumento,EscalaCD);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -230,7 +233,7 @@ public class TrasladoLogisticaController {
 
     }
 
-    private void setRecoleccionTrasladoLogisticoEstado(TrasladoLogisticoRecoleccionModel cls) {
+    public void setRecoleccionTrasladoLogisticoEstado(TrasladoLogisticoRecoleccionModel cls) {
         ProgressDialog pDialog = ProgressDialog.show(context, "Enviado Datos", "Espere...", true, false);
         ApiService authService = new Retrofit.Builder()
                 .baseUrl(var.getURL_API())

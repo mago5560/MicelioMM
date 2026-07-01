@@ -67,7 +67,7 @@ public class FragmPrincipal extends Fragment implements HojaRutaResumenAdapter.O
 
     private void findViewsById(){
         util = new FunctionCustoms();
-        filtroPrincipalCustoms = new FiltroPrincipalCustoms();
+
 
         ((TextView) view.findViewById(R.id.lblTituloNavBar)).setText("Hoja De Ruta Resumen");
 
@@ -133,6 +133,7 @@ public class FragmPrincipal extends Fragment implements HojaRutaResumenAdapter.O
         ((LinearLayout) view.findViewById(R.id.llyFiltro)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                filtroPrincipalCustoms = new FiltroPrincipalCustoms();
                 filtroPrincipalCustoms.setDependencias(hojaDeRutaController);
                 filtroPrincipalCustoms.show(getActivity().getSupportFragmentManager(),"filtro");
             }

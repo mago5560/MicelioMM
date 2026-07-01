@@ -8,7 +8,7 @@
     <color name="color_primary_light">#ffd7f1</color>
     <color name="color_primary">#824c76</color>
     <color name="color_primary_dark">#6c5464</color>
-    <color name="color_accent_light">#ffd7f1</color>
+    <color name="color_accent_light">#F4C7E4</color>
     <color name="color_accent">#824c76</color>
     <color name="color_accent_dark">#6c5464</color>
 
@@ -25,4 +25,10 @@
     <color name="color_re_programado">#f6a04d</color>
     <color name="color_liquidado">#f3d321</color>
 
+    <color name="color_grey_lig_dark">#805E78</color>
+
+    <color name="color_sociedad_mm">#5C6FE9</color>
+    <color name="color_sociedad_nl">#C7C8CA</color>
+    <color name="color_sociedad_clv">#F89724</color>
+    <color name="color_sociedad_com">#77B679</color>
 </resources>

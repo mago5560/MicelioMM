@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 public class DbHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "miceliomm.sqlite";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public int getDbVersion(){
         return DATABASE_VERSION;
@@ -194,6 +194,10 @@ public class DbHandler extends SQLiteOpenHelper {
         if ( getDbVersion() == 2){
             db.execSQL("DROP TABLE IF EXISTS TblHojaRuta");
             db.execSQL(HojaRuta);
+        }
+        else if (getDbVersion() == 3){
+            db.execSQL("ALTER TABLE TblHojaRuta ADD COLUMN escalaCD INTEGER");
+            db.execSQL("ALTER TABLE TblHojaRuta ADD COLUMN tipoDocumento TEXT");
         }
 
     }

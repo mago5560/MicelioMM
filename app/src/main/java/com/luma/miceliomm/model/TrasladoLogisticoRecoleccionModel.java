@@ -26,6 +26,14 @@ public class TrasladoLogisticoRecoleccionModel {
     public String rutaImagen="";
     public String nombreImagen="";
     public String fechaHoraRecoleccion="";
-
     public File fileImagen=null;
+    public String tipoDocumento = "";
+    public int escalaCD = 0;
+    public String motivoNoRecoleccion = "";
+    @SerializedName("idMotivoDeRechazoTraslado")
+    @Expose
+    public String idMotivoDeRechazoTraslado="";
+
+
+
 }

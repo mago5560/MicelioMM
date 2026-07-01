@@ -19,17 +19,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -38,12 +41,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.luma.miceliomm.adapter.MotivoMaestroAdapter;
+import com.luma.miceliomm.adapter.TipoDocumentoAdapter;
 import com.luma.miceliomm.controller.LocationController;
 import com.luma.miceliomm.controller.MotivoController;
+import com.luma.miceliomm.controller.TipoDocumentoController;
 import com.luma.miceliomm.controller.TrasladoLogisticaController;
 import com.luma.miceliomm.customs.FunctionCustoms;
 import com.luma.miceliomm.model.HojaRutaDetalleModel;
 import com.luma.miceliomm.model.MotivoModel;
+import com.luma.miceliomm.model.TipoDocumentoModel;
 import com.luma.miceliomm.model.TrasladoLogisticaModel;
 
 import java.io.File;
@@ -59,13 +65,14 @@ import java.util.List;
 
 public class MactyTrasladoLogistico extends AppCompatActivity
         implements LocationController.LocationUpdateListener
-                    , MotivoMaestroAdapter.OnItemClickListener {
+                    , MotivoMaestroAdapter.OnItemClickListener
+                    , TipoDocumentoAdapter.OnItemClickListener{
 
     private Intent intent;
     private FunctionCustoms util;
 
     private String Latitud ="0", Longitud="0";
-    private int idHojaDeRuta=0,idTraslado=0,idTrasladoLogistica=0;
+    private int idHojaDeRuta=0,idTraslado=0,idTrasladoLogistica=0,escalaCD=0;
     private int rechazo=0;
 
     // Constantes para los requests
@@ -139,7 +146,12 @@ public class MactyTrasladoLogistico extends AppCompatActivity
         ((Button) findViewById(R.id.btnGrabar)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                grabar();
+
+                if(escalaCD == 1){
+                    mensajeEscalaCD().show();
+                }else{
+                    grabar();
+                }
             }
         });
 
@@ -169,6 +181,24 @@ public class MactyTrasladoLogistico extends AppCompatActivity
 
                 alertDialogMaps(hojaRutaDetalleModel.latitudEntregaTraslado,
                         hojaRutaDetalleModel.longitudEntregaTraslado, hojaRutaDetalleModel.referencia);
+            }
+        });
+
+        ((ToggleButton) findViewById(R.id.toggleEscalaCD)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(@NonNull CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked){
+                    escalaCD = 1;
+                }else{
+                    escalaCD = 0;}
+            }
+        });
+
+        ((EditText) findViewById(R.id.txtTipoDocumentoRecepcion)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogTipoDocumento();
             }
         });
 
@@ -212,11 +242,13 @@ public class MactyTrasladoLogistico extends AppCompatActivity
         if (rechazo ==1){
             ((TextView) findViewById(R.id.lblTituloNavBar)).setText("Traslado Logistico Rechado");
             ((LinearLayout) findViewById(R.id.llyRechazoTraslado)).setVisibility(View.VISIBLE);
+            ((CardView) findViewById(R.id.cardRechazo)).setVisibility(View.VISIBLE);
             ((Button) findViewById(R.id.btnGrabar)).setText("Rechazar");
             trasladoLogisticaModel.idEstado = 7;
         }else {
             ((TextView) findViewById(R.id.lblTituloNavBar)).setText("Traslado Logistico Entrega");
             ((LinearLayout) findViewById(R.id.llyRechazoTraslado)).setVisibility(View.GONE);
+            ((CardView) findViewById(R.id.cardRechazo)).setVisibility(View.GONE);
             ((Button) findViewById(R.id.btnGrabar)).setText("Entrega");
             trasladoLogisticaModel.idEstado = 6;
         }
@@ -237,7 +269,7 @@ public class MactyTrasladoLogistico extends AppCompatActivity
             trasladoLogisticaModel.latitudEntregaTraslado = Latitud;
             trasladoLogisticaModel.longitudEntregaTraslado = Longitud;
             trasladoLogisticaModel.fechaDeEntregaTraslado = util.getFechaHoraActualJson();
-
+            trasladoLogisticaModel.escalaCD = escalaCD;
             trasladoLogisticaController.setTrasladoLogistico(trasladoLogisticaModel);
 
         }
@@ -554,6 +586,113 @@ public class MactyTrasladoLogistico extends AppCompatActivity
 
     // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="Maestro Tipo De Documento">
+    private TipoDocumentoController tipoDocumentoController;
+
+    AlertDialog alertDialogTipoDocumento;
+    TipoDocumentoAdapter tipoDocumentoAdapter;
+    ArrayList<TipoDocumentoModel>  tipoDocumentoModelArrayList;
+
+    private void dialogTipoDocumento() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+
+        final LayoutInflater inflater = getLayoutInflater();
+        final View dialogLayout = inflater.inflate(R.layout.content_datos_maestros, null);
+        dialogTipoDocumentoFindViewsByIds(dialogLayout);
+        dialogTipoDocumentoActions(dialogLayout);
+        buscarTipoDocumento(dialogLayout);
+        builder.setTitle("Registros Existentes");
+
+        builder.setNegativeButton("Cerrar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        builder.setPositiveButton("Limpiar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ((EditText) findViewById(R.id.txtTipoDocumentoRecepcion)).setText("Seleccione Tipo Documento");
+                trasladoLogisticaModel.idTipoDocumento = 0;
+                dialogInterface.dismiss();
+            }
+        });
+
+        builder.setView(dialogLayout);
+        alertDialogTipoDocumento = builder.show();
+    }
+
+
+    private void dialogTipoDocumentoFindViewsByIds(View v) {
+        //RecyclerView
+        ((RecyclerView) v.findViewById(R.id.grdDatos)).setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        ((RecyclerView) v.findViewById(R.id.grdDatos)).setLayoutManager(llm);
+        ((TextView) v.findViewById(R.id.lblTituloNavBar)).setText("");
+    }
+
+    private void dialogTipoDocumentoActions(View v) {
+        ((ImageView) v.findViewById(R.id.imgvwAbrirBuscador)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View vv) {
+                visibleFilter(v, true);
+            }
+        });
+
+        ((ImageView) v.findViewById(R.id.imgvwCerrarBuscador)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View vv) {
+                visibleFilter(v, false);
+            }
+        });
+
+        ((SearchView) v.findViewById(R.id.txtBuscador)).setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                tipoDocumentoAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
+
+        ((SwipeRefreshLayout) v.findViewById(R.id.swipeRefresh)).setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                buscarMotivo(v);
+            }
+        });
+    }
+
+    @Override
+    public void onClick(TipoDocumentoAdapter.ItemAdapterViewHolder holder, int position) {
+        ((EditText) findViewById(R.id.txtTipoDocumentoRecepcion)).setText(tipoDocumentoAdapter.info.get(position).descripcion);
+        trasladoLogisticaModel.idTipoDocumento =  tipoDocumentoAdapter.info.get(position).id;
+        alertDialogTipoDocumento.dismiss();
+    }
+
+    private void buscarTipoDocumento(View v) {
+        tipoDocumentoModelArrayList = new ArrayList<>();
+        tipoDocumentoAdapter = new TipoDocumentoAdapter(tipoDocumentoModelArrayList, this, this);
+        tipoDocumentoController = new TipoDocumentoController(this
+                , ((RecyclerView) v.findViewById(R.id.grdDatos))
+                , tipoDocumentoAdapter
+                , ((SwipeRefreshLayout) v.findViewById(R.id.swipeRefresh))
+                , ((LinearLayout) v.findViewById(R.id.emptyView))
+        );
+
+        tipoDocumentoController.buscar();
+        ((TextView) v.findViewById(R.id.lblFechaActualizacion)).setText(util.getFechaHoraActual());
+    }
+
+    // </editor-fold>
+
     private void visibleFilter(View v, boolean visible) {
         if (visible) {
             ((LinearLayout) v.findViewById(R.id.llyFilter)).setVisibility(View.VISIBLE);
@@ -567,6 +706,32 @@ public class MactyTrasladoLogistico extends AppCompatActivity
     }
 
 
+    public android.app.AlertDialog mensajeEscalaCD() {
+        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        android.app.AlertDialog alerta;
+        builder.setCancelable(false);
+
+        builder.setTitle("Mensaje del Sistema");
+        builder.setMessage("Selecciono operacion con Escala en C.D. esta seguro?");
+
+        builder.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                grabar();
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alerta = builder.create();
+        return alerta;
+    }
 
     // <editor-fold defaultstate="collapsed" desc="Implementacion de mapa">
     private void openLocationInMap(double latitude, double longitude, String label) {

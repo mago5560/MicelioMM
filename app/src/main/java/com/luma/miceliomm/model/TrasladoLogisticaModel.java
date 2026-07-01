@@ -19,4 +19,7 @@ public class TrasladoLogisticaModel {
     public String rutaImagen="";
     public File fileImagen=null;
 
+    public int idTipoDocumento=0;
+    public int escalaCD=0;
+
 }
